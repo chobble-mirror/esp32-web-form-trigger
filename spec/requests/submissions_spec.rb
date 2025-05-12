@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Submissions", type: :request do
   let!(:device) { Device.create!(name: "Test Device", location: "Test Location") }
-  let!(:form) do 
+  let!(:form) do
     Form.create!(
       background_color: "#ffffff",
       text_color: "#000000",
@@ -21,7 +21,7 @@ RSpec.describe "Submissions", type: :request do
       email_address: "test@example.com"
     )
   end
-  
+
   describe "authorization" do
     context "when not logged in" do
       it "redirects to login for index" do
@@ -63,7 +63,7 @@ RSpec.describe "Submissions", type: :request do
       end
     end
   end
-  
+
   describe "public form submissions" do
     it "allows access to public form" do
       get public_form_path(form.id, device.id)
@@ -72,11 +72,11 @@ RSpec.describe "Submissions", type: :request do
 
     it "allows submission creation through public form" do
       expect {
-        post public_form_path(form.id, device.id), params: { 
-          submission: { 
+        post public_form_path(form.id, device.id), params: {
+          submission: {
             name: "Public User",
             email_address: "public@example.com"
-          } 
+          }
         }
       }.to change(Submission, :count).by(1)
       expect(response).to have_http_status(:success)

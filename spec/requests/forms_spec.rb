@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Forms", type: :request do
-  let!(:form) do 
+  let!(:form) do
     Form.create!(
       background_color: "#ffffff",
       text_color: "#000000",
@@ -12,7 +12,7 @@ RSpec.describe "Forms", type: :request do
       target_email_address: "test@example.com"
     )
   end
-  
+
   describe "authorization" do
     context "when not logged in" do
       it "redirects to login for index" do
@@ -31,19 +31,19 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "redirects to login for create" do
-        post forms_path, params: { 
-          form: { 
+        post forms_path, params: {
+          form: {
             button_text: "New Form",
             header_text: "New Header",
             target_email_address: "new@example.com"
-          } 
+          }
         }
         expect(response).to redirect_to(login_path)
       end
 
       it "redirects to login for update" do
-        patch form_path(form), params: { 
-          form: { button_text: "Updated Form" } 
+        patch form_path(form), params: {
+          form: {button_text: "Updated Form"}
         }
         expect(response).to redirect_to(login_path)
       end
@@ -73,19 +73,19 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "redirects to root for create" do
-        post forms_path, params: { 
-          form: { 
+        post forms_path, params: {
+          form: {
             button_text: "New Form",
             header_text: "New Header",
             target_email_address: "new@example.com"
-          } 
+          }
         }
         expect(response).to redirect_to(root_path)
       end
 
       it "redirects to root for update" do
-        patch form_path(form), params: { 
-          form: { button_text: "Updated Form" } 
+        patch form_path(form), params: {
+          form: {button_text: "Updated Form"}
         }
         expect(response).to redirect_to(root_path)
       end
@@ -116,20 +116,20 @@ RSpec.describe "Forms", type: :request do
 
       it "allows form creation" do
         expect {
-          post forms_path, params: { 
-            form: { 
+          post forms_path, params: {
+            form: {
               button_text: "New Form",
               header_text: "New Header",
               target_email_address: "new@example.com"
-            } 
+            }
           }
         }.to change(Form, :count).by(1)
         expect(response).to have_http_status(:redirect)
       end
 
       it "allows form update" do
-        patch form_path(form), params: { 
-          form: { button_text: "Updated Form" } 
+        patch form_path(form), params: {
+          form: {button_text: "Updated Form"}
         }
         expect(form.reload.button_text).to eq("Updated Form")
         expect(response).to have_http_status(:redirect)

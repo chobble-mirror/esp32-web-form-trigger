@@ -15,7 +15,7 @@ class CreateForms < ActiveRecord::Migration[8.0]
       t.text :terms_and_conditions
       t.text :thank_you_text
       t.string :target_email_address
-      
+
       t.timestamps
     end
   end

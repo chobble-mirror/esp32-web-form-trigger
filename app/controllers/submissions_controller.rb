@@ -1,13 +1,13 @@
-require 'csv'
+require "csv"
 
 class SubmissionsController < ApplicationController
   before_action :require_login
   before_action :require_admin
   before_action :set_submission, only: [:show]
-  
+
   def index
     @submissions = Submission.includes(:form, :device).order(created_at: :desc)
-    
+
     respond_to do |format|
       format.html
       format.csv do
@@ -15,25 +15,25 @@ class SubmissionsController < ApplicationController
       end
     end
   end
-  
+
   def show
     # @submission is set by the before_action
   end
-  
+
   private
-  
+
   def set_submission
     @submission = Submission.includes(:form, :device).find(params[:id])
   end
-  
+
   def generate_csv
     CSV.generate(headers: true) do |csv|
       # Add headers
       csv << [
-        'Date', 'Form', 'Device', 'Name', 'Email', 
-        'Phone', 'Address', 'Postcode', 'Credit Status', 'Email Status'
+        "Date", "Form", "Device", "Name", "Email",
+        "Phone", "Address", "Postcode", "Credit Status", "Email Status"
       ]
-      
+
       # Add data
       @submissions.each do |submission|
         csv << [

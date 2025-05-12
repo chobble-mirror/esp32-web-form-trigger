@@ -38,7 +38,7 @@ class UsersController < ApplicationController
         if User.count == 1
           log_in @user
         end
-        
+
         flash[:success] = "Account created"
         redirect_to current_user&.admin? ? users_path : root_path
       else
@@ -124,12 +124,12 @@ class UsersController < ApplicationController
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
   end
-  
+
   def restrict_regular_user_update
     # Regular users can't update users at all (handled by require_admin)
     # This is just an extra safety measure
     return if current_user&.admin?
-    
+
     # If somehow a non-admin tries to update users, we should block it
     flash[:danger] = "You do not have permission to modify user information"
     redirect_to root_path
