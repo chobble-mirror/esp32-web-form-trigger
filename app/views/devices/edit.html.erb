@@ -1,0 +1,72 @@
+<header>
+  <h1>Edit Device</h1>
+  <% if @device.archived %>
+    <p><small>This device is archived</small></p>
+  <% end %>
+</header>
+
+<%= render 'form', device: @device %>
+
+<section>
+  <h3>Device Status</h3>
+  <% if @device.archived %>
+    <p>This device is archived and won't appear in the default device list.</p>
+    <%= button_to unarchive_device_path(@device), method: :post do %>
+      Restore Device
+    <% end %>
+  <% else %>
+    <p>Archive this device if it's no longer in use. Archived devices can be restored later.</p>
+    <%= button_to archive_device_path(@device), method: :post do %>
+      Archive Device
+    <% end %>
+  <% end %>
+</section>
+
+<section>
+  <h2>Form Links</h2>
+  <p>Here are public links to this device's forms:</p>
+  
+  <% if Form.any? %>
+    <ul>
+      <% Form.all.each do |form| %>
+        <li>
+          <%= link_to form.name, public_form_path(form.id, @device.id), target: "_blank" %>
+          <small><%= form.target_email_address %></small>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No forms available. <%= link_to "Create a form", new_form_path %> first.</p>
+  <% end %>
+</section>
+
+<section>
+  <h3>Latest Submissions</h3>
+  <% submissions = @device.submissions.order(created_at: :desc).limit(5) %>
+  
+  <% if submissions.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Form</th>
+          <th>Name</th>
+          <th>Credit Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% submissions.each do |submission| %>
+          <tr>
+            <td><%= link_to submission.created_at.strftime("%Y-%m-%d %H:%M"), submission_path(submission) %></td>
+            <td><%= submission.form.name %></td>
+            <td><%= submission.name.present? ? submission.name : "Not provided" %></td>
+            <td><%= submission.credit_claimed ? "Claimed" : "Available" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p><%= link_to "View all submissions", submissions_path %></p>
+  <% else %>
+    <p>No submissions yet for this device.</p>
+  <% end %>
+</section>

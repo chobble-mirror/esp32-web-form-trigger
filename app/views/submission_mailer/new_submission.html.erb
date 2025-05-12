@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>New Form Submission</h1>
+    
+    <p><strong>Device:</strong> <%= @device.name %> (<%= @device.location.present? ? @device.location : "No location specified" %>)</p>
+    
+    <h2>Contact Information</h2>
+    <table>
+      <% if @submission.name.present? %>
+        <tr>
+          <th>Name:</th>
+          <td><%= @submission.name %></td>
+        </tr>
+      <% end %>
+      
+      <% if @submission.email_address.present? %>
+        <tr>
+          <th>Email:</th>
+          <td><%= @submission.email_address %></td>
+        </tr>
+      <% end %>
+      
+      <% if @submission.phone.present? %>
+        <tr>
+          <th>Phone:</th>
+          <td><%= @submission.phone %></td>
+        </tr>
+      <% end %>
+      
+      <% if @submission.address.present? %>
+        <tr>
+          <th>Address:</th>
+          <td><%= @submission.address %></td>
+        </tr>
+      <% end %>
+      
+      <% if @submission.postcode.present? %>
+        <tr>
+          <th>Postcode:</th>
+          <td><%= @submission.postcode %></td>
+        </tr>
+      <% end %>
+    </table>
+    
+    <p>Submission date: <%= @submission.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+    
+    <p>This submission has automatically added a credit to the arcade machine.</p>
+  </body>
+</html>

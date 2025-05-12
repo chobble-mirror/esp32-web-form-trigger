@@ -1,0 +1,37 @@
+<header>
+  <h1>Submissions</h1>
+</header>
+
+<% if @submissions.any? %>
+  <section>
+    <%= link_to submissions_path(format: :csv) do %>
+      <strong>Export to CSV</strong>
+    <% end %>
+  </section>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Form</th>
+        <th>Device</th>
+        <th>Credit Status</th>
+        <th>Email Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @submissions.each do |submission| %>
+        <tr>
+          <td><%= link_to submission.created_at.strftime("%Y-%m-%d %H:%M"), submission_path(submission) %></td>
+          <td><%= link_to submission.form.name, edit_form_path(submission.form) %></td>
+          <td><%= link_to submission.device.name, edit_device_path(submission.device) %></td>
+          <td><%= submission.credit_claimed ? "Claimed" : "Available" %></td>
+          <td><%= submission.email_status %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <p><small>To delete submissions, delete the entire form.</small></p>
+<% else %>
+  <p>No submissions found.</p>
+<% end %>

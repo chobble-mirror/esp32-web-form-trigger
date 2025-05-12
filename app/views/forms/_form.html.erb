@@ -1,0 +1,112 @@
+<%= form_with(model: form) do |f| %>
+  <% if form.errors.any? %>
+    <div>
+      <h2><%= pluralize(form.errors.count, "error") %> prohibited this form from being saved:</h2>
+      <ul>
+        <% form.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <fieldset>
+    <legend>Appearance</legend>
+    
+    <div>
+      <%= f.label :header_image %>
+      <%= f.file_field :header_image %>
+    </div>
+
+    <div>
+      <%= f.label :background_color %>
+      <%= f.color_field :background_color %>
+    </div>
+
+    <div>
+      <%= f.label :text_color %>
+      <%= f.color_field :text_color %>
+    </div>
+
+    <div>
+      <%= f.label :button_color %>
+      <%= f.color_field :button_color %>
+    </div>
+
+    <div>
+      <%= f.label :button_text_color %>
+      <%= f.color_field :button_text_color %>
+    </div>
+
+    <div>
+      <%= f.label :button_text %>
+      <%= f.text_field :button_text, required: true %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Content</legend>
+    
+    <div>
+      <%= f.label :header_text, "Header Text (Markdown)" %>
+      <%= f.text_area :header_text, rows: 5, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :terms_and_conditions, "Terms and Conditions (Markdown)" %>
+      <%= f.text_area :terms_and_conditions, rows: 5 %>
+    </div>
+
+    <div>
+      <%= f.label :thank_you_text, "Thank You Text (Markdown)" %>
+      <%= f.text_area :thank_you_text, rows: 5 %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Form Fields</legend>
+    
+    <div>
+      <%= f.check_box :enable_name %>
+      <%= f.label :enable_name, "Enable Name Field" %>
+    </div>
+
+    <div>
+      <%= f.check_box :enable_email_address %>
+      <%= f.label :enable_email_address, "Enable Email Address Field" %>
+    </div>
+
+    <div>
+      <%= f.check_box :enable_phone %>
+      <%= f.label :enable_phone, "Enable Phone Field" %>
+    </div>
+
+    <div>
+      <%= f.check_box :enable_address %>
+      <%= f.label :enable_address, "Enable Address Field" %>
+    </div>
+
+    <div>
+      <%= f.check_box :enable_postcode %>
+      <%= f.label :enable_postcode, "Enable Postcode Field" %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Notification</legend>
+    
+    <div>
+      <%= f.label :target_email_address %>
+      <%= f.email_field :target_email_address, required: true %>
+    </div>
+  </fieldset>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

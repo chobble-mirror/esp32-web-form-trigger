@@ -1,0 +1,9 @@
+<header>
+  <h1>Edit Form</h1>
+</header>
+
+<%= render 'form', form: @form %>
+
+<%= button_to form_path(@form), method: :delete, form: { data: { turbo_confirm: "Are you sure?" } } do %>
+  Delete
+<% end %>

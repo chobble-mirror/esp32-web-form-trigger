@@ -1,0 +1,15 @@
+New Form Submission
+
+Device: <%= @device.name %> (<%= @device.location.present? ? @device.location : "No location specified" %>)
+
+Contact Information
+==================
+<% if @submission.name.present? %>Name: <%= @submission.name %><% end %>
+<% if @submission.email_address.present? %>Email: <%= @submission.email_address %><% end %>
+<% if @submission.phone.present? %>Phone: <%= @submission.phone %><% end %>
+<% if @submission.address.present? %>Address: <%= @submission.address %><% end %>
+<% if @submission.postcode.present? %>Postcode: <%= @submission.postcode %><% end %>
+
+Submission date: <%= @submission.created_at.strftime("%Y-%m-%d %H:%M") %>
+
+This submission has automatically added a credit to the arcade machine.

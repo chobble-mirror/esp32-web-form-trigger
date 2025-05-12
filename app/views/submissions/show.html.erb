@@ -1,0 +1,64 @@
+<header>
+  <h1>Submission Details</h1>
+</header>
+
+<section>
+  <h2>Submission Information</h2>
+  <dl>
+    <dt>Submitted On</dt>
+    <dd><%= @submission.created_at.strftime("%Y-%m-%d %H:%M") %></dd>
+
+    <dt>Form</dt>
+    <dd><%= link_to @submission.form.name, edit_form_path(@submission.form) %></dd>
+
+    <dt>Device</dt>
+    <dd><%= link_to @submission.device.name, edit_device_path(@submission.device) %></dd>
+
+    <dt>Credit Status</dt>
+    <dd><%= @submission.credit_claimed ? "Claimed" : "Available" %></dd>
+
+    <dt>Email Status</dt>
+    <dd><%= @submission.email_status %></dd>
+    
+    <% if @submission.emailed_at.present? %>
+      <dt>Email Sent</dt>
+      <dd><%= @submission.emailed_at.strftime("%Y-%m-%d %H:%M") %></dd>
+    <% end %>
+  </dl>
+</section>
+
+<section>
+  <h2>Contact Information</h2>
+  <dl>
+    <% if @submission.name.present? %>
+      <dt>Name</dt>
+      <dd><%= @submission.name %></dd>
+    <% end %>
+
+    <% if @submission.email_address.present? %>
+      <dt>Email</dt>
+      <dd><%= @submission.email_address %></dd>
+    <% end %>
+    
+    <% if @submission.phone.present? %>
+      <dt>Phone</dt>
+      <dd><%= @submission.phone %></dd>
+    <% end %>
+    
+    <% if @submission.address.present? %>
+      <dt>Address</dt>
+      <dd><%= @submission.address %></dd>
+    <% end %>
+    
+    <% if @submission.postcode.present? %>
+      <dt>Postcode</dt>
+      <dd><%= @submission.postcode %></dd>
+    <% end %>
+  </dl>
+</section>
+
+<div>
+  <%= link_to submissions_path do %>
+    <em>Back to Submissions</em>
+  <% end %>
+</div>

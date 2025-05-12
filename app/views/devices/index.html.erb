@@ -1,0 +1,57 @@
+<header>
+  <h1>Devices</h1>
+</header>
+
+<section>
+  <%= link_to new_device_path do %>
+    <strong>New Device</strong>
+  <% end %>
+</section>
+
+<section>
+  <nav>
+    <%= link_to "Active (#{@total_count - @archived_count})", devices_path(filter: 'active'), class: @filter == 'active' ? 'active' : '' %>
+    /
+    <%= link_to "All (#{@total_count})", devices_path(filter: 'all'), class: @filter == 'all' ? 'active' : '' %>
+    /
+    <%= link_to "Archived (#{@archived_count})", devices_path(filter: 'archived'), class: @filter == 'archived' ? 'active' : '' %>
+  </nav>
+</section>
+
+<% if @devices.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Created</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @devices.each do |device| %>
+        <tr<%= device.archived ? ' style="opacity: 0.7;"' : '' %>>
+          <td><code><%= device.id %></code></td>
+          <td>
+            <%= link_to device.name, edit_device_path(device) %>
+            <% if device.archived %>
+              <small>(Archived)</small>
+            <% end %>
+          </td>
+          <td><%= device.location %></td>
+          <td><%= device.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+          <td>
+            <% if device.archived %>
+              <%= button_to unarchive_device_path(device), method: :post do %>
+                Restore
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No devices found.</p>
+<% end %>

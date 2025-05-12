@@ -1,0 +1,23 @@
+<style>
+  body {
+    background-color: <%= @form.background_color %>;
+    color: <%= @form.text_color %>;
+  }
+</style>
+
+<header>
+  <% if @form.header_image.attached? %>
+    <%= image_tag url_for(@form.header_image) %>
+  <% end %>
+</header>
+
+<main>
+  <div>
+    <% if @form.thank_you_text.present? %>
+      <%= markdown(@form.thank_you_text) %>
+    <% else %>
+      <h1>Thank You</h1>
+      <p>Your submission has been received. A credit has been added to the arcade machine.</p>
+    <% end %>
+  </div>
+</main>

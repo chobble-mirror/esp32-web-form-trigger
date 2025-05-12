@@ -1,0 +1,46 @@
+<header>
+  <h1>Forms</h1>
+</header>
+
+<section>
+  <%= link_to new_form_path do %>
+    <strong>New Form</strong>
+  <% end %>
+</section>
+
+<% if @forms.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Target Email</th>
+        <th>Fields Enabled</th>
+        <th>Created</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @forms.each do |form| %>
+        <tr>
+          <td><%= link_to form.name, edit_form_path(form) %></td>
+          <td><%= form.target_email_address %></td>
+          <td>
+            <%= "Name" if form.enable_name %>
+            <%= "Email" if form.enable_email_address %>
+            <%= "Phone" if form.enable_phone %>
+            <%= "Address" if form.enable_address %>
+            <%= "Postcode" if form.enable_postcode %>
+          </td>
+          <td><%= form.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+          <td>
+            <div>
+              <small>URL: /form/<%= form.id %>/{device_id}</small>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No forms found.</p>
+<% end %>
