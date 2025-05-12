@@ -76,10 +76,10 @@ RSpec.describe "Public user creation", type: :request do
         }
 
         expect(User.first.admin).to be true
-        
+
         # Logout first
         delete "/logout"
-        
+
         # Second user after logout
         post "/signup", params: {
           user: {

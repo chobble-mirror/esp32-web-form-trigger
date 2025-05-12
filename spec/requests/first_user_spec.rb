@@ -78,7 +78,7 @@ RSpec.describe "User Signup", type: :request do
 
       # Should be prevented
       expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(root_path) 
+      expect(response).to redirect_to(root_path)
       expect(flash[:danger]).to eq("Already logged in")
       expect(User.count).to eq(1)
       expect(User.find_by(email: "second@example.com")).to be_nil

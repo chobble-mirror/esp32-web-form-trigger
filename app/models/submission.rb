@@ -21,7 +21,7 @@ class Submission < ApplicationRecord
 
   def mark_as_failed!(error_message = nil)
     update!(
-      email_status: "failed", 
+      email_status: "failed",
       failure_reason: error_message
     )
   end
