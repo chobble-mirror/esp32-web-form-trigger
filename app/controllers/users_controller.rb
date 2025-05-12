@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   skip_before_action :require_login, only: [:new, :create]
+  before_action :require_not_logged_in, only: [:new, :create]
   before_action :require_admin, only: [:index, :edit, :update, :destroy, :impersonate]
   before_action :set_user, only: [:edit, :update, :destroy, :change_password, :update_password, :impersonate]
   before_action :require_correct_user, only: [:change_password, :update_password]
@@ -24,30 +25,16 @@ class UsersController < ApplicationController
   end
 
   def create
-    # Only allow user creation if:
-    # 1. There are no users yet (first user becomes admin via callback in User model)
-    # 2. The current user is an admin
-    if User.count == 0 || current_user&.admin?
-      @user = User.new(user_params)
-      if @user.save
-        if Rails.env.production?
-          NtfyService.notify("new user: #{@user.email}")
-        end
-
-        # Auto-login the user if this is the first user
-        if User.count == 1
-          log_in @user
-        end
-
-        flash[:success] = "Account created"
-        redirect_to current_user&.admin? ? users_path : root_path
-      else
-        render :new, status: :unprocessable_entity
+    @user = User.new(user_params)
+    if @user.save
+      if Rails.env.production?
+        NtfyService.notify("new user: #{@user.email}")
       end
-    else
-      # Unauthorized user creation attempt
-      flash[:danger] = "You are not authorized to create new users"
+      log_in @user
+      flash[:success] = "Account created"
       redirect_to root_path
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -132,6 +119,13 @@ class UsersController < ApplicationController
   def require_correct_user
     unless current_user == @user
       flash[:danger] = "You can only change your own password"
+      redirect_to root_path
+    end
+  end
+
+  def require_not_logged_in
+    if current_user
+      flash[:danger] = "Already logged in"
       redirect_to root_path
     end
   end

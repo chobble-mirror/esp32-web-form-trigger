@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_13_000000) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_13_000001) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -202,6 +202,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_13_000000) do
     t.datetime "emailed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "failure_reason"
     t.index ["device_id", "credit_claimed"], name: "index_submissions_on_device_and_credit"
     t.index ["device_id"], name: "index_submissions_on_device_id"
     t.index ["form_id"], name: "index_submissions_on_form_id"

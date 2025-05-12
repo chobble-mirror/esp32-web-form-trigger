@@ -19,7 +19,10 @@ class Submission < ApplicationRecord
     update!(email_status: "sent", emailed_at: Time.current)
   end
 
-  def mark_as_failed!
-    update!(email_status: "failed")
+  def mark_as_failed!(error_message = nil)
+    update!(
+      email_status: "failed", 
+      failure_reason: error_message
+    )
   end
 end

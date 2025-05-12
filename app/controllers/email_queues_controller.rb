@@ -2,25 +2,17 @@ class EmailQueuesController < ApplicationController
   before_action :require_admin
 
   def index
-    # Since we don't have SolidQueue tables yet, let's focus on submission email statuses
-    @pending_submissions = Submission.where(email_status: "pending")
-      .order(created_at: :desc)
-      .limit(50)
-
-    @sent_submissions = Submission.where(email_status: "sent")
-      .order(emailed_at: :desc)
-      .limit(50)
-
-    @failed_submissions = Submission.where(email_status: "failed")
-      .order(created_at: :desc)
-      .limit(50)
+    # Get submissions by email status
+    @pending_submissions = Submission.where(email_status: "pending").order(created_at: :desc).limit(50)
+    @sent_submissions = Submission.where(email_status: "sent").order(emailed_at: :desc).limit(50)
+    @failed_submissions = Submission.where(email_status: "failed").order(created_at: :desc).limit(50)
 
     # Summary stats
     @stats = {
       total: Submission.count,
-      pending: Submission.where(email_status: "pending").count,
-      sent: Submission.where(email_status: "sent").count,
-      failed: Submission.where(email_status: "failed").count
+      pending: @pending_submissions.size,
+      sent: @sent_submissions.size,
+      failed: @failed_submissions.size
     }
   end
 

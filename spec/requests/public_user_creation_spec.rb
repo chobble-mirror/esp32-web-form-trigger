@@ -65,7 +65,7 @@ RSpec.describe "Public user creation", type: :request do
     end
 
     context "with multiple users" do
-      it "sets the first user as admin" do
+      it "sets the first user as admin and requires logout before creating another" do
         # First user
         post "/signup", params: {
           user: {
@@ -76,8 +76,11 @@ RSpec.describe "Public user creation", type: :request do
         }
 
         expect(User.first.admin).to be true
-
-        # Second user
+        
+        # Logout first
+        delete "/logout"
+        
+        # Second user after logout
         post "/signup", params: {
           user: {
             email: "second@example.com",
@@ -87,6 +90,7 @@ RSpec.describe "Public user creation", type: :request do
         }
 
         second_user = User.find_by(email: "second@example.com")
+        expect(second_user).to be_present
         expect(second_user.admin).to be false
       end
     end

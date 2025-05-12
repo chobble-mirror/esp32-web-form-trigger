@@ -32,8 +32,7 @@ group :development, :test do
 end
 
 group :development do
-  # Open emails in browser instead of sending in development mode
-  gem "letter_opener"
+  # Development specific gems go here
 end
 
 # PDF generation

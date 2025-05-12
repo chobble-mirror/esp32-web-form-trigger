@@ -30,14 +30,4 @@ Rails.application.config.action_mailer.default_options = {
   from: ENV.fetch("DEFAULT_EMAIL_FROM", "noreply@example.com")
 }
 
-# Set up Active Job as the queuing backend for Action Mailer
-Rails.application.config.action_mailer.queue_adapter = :solid_queue
-
-# Development-specific overrides
-if Rails.env.development?
-  # Print emails to the console in development if no SMTP server is configured
-  unless ENV["SMTP_SERVER"].present? && ENV["SMTP_USERNAME"].present? && ENV["SMTP_PASSWORD"].present?
-    Rails.application.config.action_mailer.delivery_method = :letter_opener
-    Rails.logger.info "Email delivery set to letter_opener since SMTP credentials are not fully configured"
-  end
-end
+# Development and production environments both use SMTP

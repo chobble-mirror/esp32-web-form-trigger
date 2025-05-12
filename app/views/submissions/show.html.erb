@@ -1,5 +1,11 @@
 <header>
   <h1>Submission Details</h1>
+  <div style="margin-bottom: 20px;">
+    <%= link_to "Preview Email", submission_path(@submission, preview_email: true), target: "_blank", class: "button" %>
+    <% if @submission.email_status == "failed" %>
+      <%= button_to "Retry Email", retry_email_queue_path(@submission), method: :post, data: { turbo_confirm: "Retry sending this email?" } %>
+    <% end %>
+  </div>
 </header>
 
 <article>
@@ -18,11 +24,32 @@
     <dd><%= @submission.credit_claimed ? "Claimed" : "Available" %></dd>
 
     <dt>Email Status</dt>
-    <dd><%= @submission.email_status %></dd>
+    <dd>
+      <% case @submission.email_status %>
+      <% when "sent" %>
+        <span class="status-completed">Sent</span>
+      <% when "failed" %>
+        <span class="status-failed">Failed</span>
+      <% when "pending" %>
+        <span class="status-processing">Pending</span>
+      <% else %>
+        <%= @submission.email_status %>
+      <% end %>
+    </dd>
 
     <% if @submission.emailed_at.present? %>
       <dt>Email Sent</dt>
       <dd><%= @submission.emailed_at.strftime("%Y-%m-%d %H:%M") %></dd>
+    <% end %>
+    
+    <% if @submission.email_status == "failed" && @submission.failure_reason.present? %>
+      <dt>Failure Reason</dt>
+      <dd>
+        <details>
+          <summary>Show error details</summary>
+          <pre><%= @submission.failure_reason %></pre>
+        </details>
+      </dd>
     <% end %>
   </dl>
 </article>

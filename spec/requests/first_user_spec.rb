@@ -47,7 +47,7 @@ RSpec.describe "User Signup", type: :request do
       )
     end
 
-    it "requires admin privileges to create additional users" do
+    it "allows anyone to create additional user accounts" do
       # Try to create a second user without being an admin
       post signup_path, params: {
         user: {
@@ -57,16 +57,17 @@ RSpec.describe "User Signup", type: :request do
         }
       }
 
-      expect(User.count).to eq(1)
-      expect(User.find_by(email: "second@example.com")).to be_nil
+      expect(User.count).to eq(2)
+      expect(User.find_by(email: "second@example.com")).to be_present
+      expect(User.find_by(email: "second@example.com").admin).to be false
     end
 
-    it "allows admin to create additional users" do
+    it "prevents logged-in users from accessing signup page" do
       # Login as admin
       admin = User.first
       post login_path, params: {session: {email: admin.email, password: "password123"}}
 
-      # Create a second user
+      # Try to create a second user while logged in
       post signup_path, params: {
         user: {
           email: "second@example.com",
@@ -75,10 +76,12 @@ RSpec.describe "User Signup", type: :request do
         }
       }
 
-      expect(User.count).to eq(2)
-      new_user = User.find_by(email: "second@example.com")
-      expect(new_user).to be_present
-      expect(new_user.admin).to be false
+      # Should be prevented
+      expect(response).to have_http_status(:redirect)
+      expect(response).to redirect_to(root_path) 
+      expect(flash[:danger]).to eq("Already logged in")
+      expect(User.count).to eq(1)
+      expect(User.find_by(email: "second@example.com")).to be_nil
     end
   end
 end

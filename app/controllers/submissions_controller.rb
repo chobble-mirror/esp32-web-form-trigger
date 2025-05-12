@@ -31,6 +31,15 @@ class SubmissionsController < ApplicationController
 
   def show
     # @submission is set by the before_action
+    
+    # Handle email preview requests
+    if params[:preview_email]
+      @form = @submission.form
+      @device = @submission.device
+      
+      # Render the email preview if requested
+      render template: "submission_mailer/new_submission", layout: "mailer"
+    end
   end
 
   private

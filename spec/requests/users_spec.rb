@@ -33,7 +33,7 @@ RSpec.describe "Users", type: :request do
         login_as_admin
       end
 
-      it "allows admin to create a new user" do
+      it "prevents even admin from creating a user while logged in" do
         post "/signup", params: {
           user: {
             email: "newuser@example.com",
@@ -43,8 +43,9 @@ RSpec.describe "Users", type: :request do
         }
 
         expect(response).to have_http_status(:redirect)
-        expect(User.find_by(email: "newuser@example.com")).to be_present
-        expect(User.find_by(email: "newuser@example.com").admin).to be false
+        expect(response).to redirect_to(root_path)
+        expect(flash[:danger]).to eq("Already logged in")
+        expect(User.find_by(email: "newuser@example.com")).to be_nil
       end
     end
 
@@ -53,7 +54,7 @@ RSpec.describe "Users", type: :request do
         login_as_user
       end
 
-      it "prevents regular user from creating users" do
+      it "prevents creating a new user when already logged in" do
         post "/signup", params: {
           user: {
             email: "newuser2@example.com",
@@ -63,6 +64,8 @@ RSpec.describe "Users", type: :request do
         }
 
         expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(root_path)
+        expect(flash[:danger]).to eq("Already logged in")
         expect(User.find_by(email: "newuser2@example.com")).to be_nil
       end
     end
