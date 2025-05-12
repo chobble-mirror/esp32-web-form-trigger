@@ -24,10 +24,32 @@ class UsersController < ApplicationController
   end
 
   def create
+<<<<<<< HEAD
     @user = User.new(user_params)
     if @user.save
       if Rails.env.production?
         NtfyService.notify("new user: #{@user.email}")
+=======
+    # Only allow user creation if:
+    # 1. There are no users yet (first user becomes admin via callback in User model)
+    # 2. The current user is an admin
+    if User.count == 0 || current_user&.admin?
+      @user = User.new(user_params)
+      if @user.save
+        if Rails.env.production?
+          NtfyService.notify("new user: #{@user.email}")
+        end
+
+        # Auto-login the user if this is the first user
+        if User.count == 1
+          log_in @user
+        end
+
+        flash[:success] = "Account created"
+        redirect_to current_user&.admin? ? users_path : root_path
+      else
+        render :new, status: :unprocessable_entity
+>>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
       end
 
       log_in @user

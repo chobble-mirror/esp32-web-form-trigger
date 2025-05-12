@@ -14,11 +14,17 @@ RSpec.describe "User Signup", type: :request do
     )
   end
 
+<<<<<<< HEAD
   it "allows an admin to create a user" do
     # Login as admin
     post login_path, params: {session: {email: "stefan@chobble.com", password: "password"}}
 
     # Create a new user
+=======
+  it "allows the first user to sign up" do
+    expect(User.count).to eq(0)
+
+>>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
     post signup_path, params: {
       user: {
         email: "newuser@example.com",
@@ -34,6 +40,7 @@ RSpec.describe "User Signup", type: :request do
     expect(new_user.admin).to be false
   end
 
+<<<<<<< HEAD
   it "allows regular users to create users" do
     # Create a regular user
     regular_user = User.create!(
@@ -47,6 +54,9 @@ RSpec.describe "User Signup", type: :request do
     post login_path, params: {session: {email: regular_user.email, password: "password123"}}
 
     # Try to create a new user
+=======
+  it "sets the first user as admin automatically" do
+>>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
     post signup_path, params: {
       user: {
         email: "newuser2@example.com",
@@ -55,6 +65,7 @@ RSpec.describe "User Signup", type: :request do
       }
     }
 
+<<<<<<< HEAD
     expect(User.find_by(email: "newuser2@example.com")).to be_present
     expect(User.find_by(email: "newuser2@example.com").admin).to be false
   end
@@ -140,4 +151,54 @@ RSpec.describe "User Signup", type: :request do
     regular_user.reload
     expect(regular_user.authenticate("newpassword")).to be_truthy
   end
+=======
+    user = User.first
+    expect(user.admin).to be true
+  end
+
+  context "after first user exists" do
+    before do
+      # Create first admin user
+      User.create!(
+        email: "admin@example.com",
+        password: "password123",
+        password_confirmation: "password123"
+      )
+    end
+
+    it "requires admin privileges to create additional users" do
+      # Try to create a second user without being an admin
+      post signup_path, params: {
+        user: {
+          email: "second@example.com",
+          password: "password123",
+          password_confirmation: "password123"
+        }
+      }
+
+      expect(User.count).to eq(1)
+      expect(User.find_by(email: "second@example.com")).to be_nil
+    end
+
+    it "allows admin to create additional users" do
+      # Login as admin
+      admin = User.first
+      post login_path, params: {session: {email: admin.email, password: "password123"}}
+
+      # Create a second user
+      post signup_path, params: {
+        user: {
+          email: "second@example.com",
+          password: "password123",
+          password_confirmation: "password123"
+        }
+      }
+
+      expect(User.count).to eq(2)
+      new_user = User.find_by(email: "second@example.com")
+      expect(new_user).to be_present
+      expect(new_user.admin).to be false
+    end
+  end
+>>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
 end
