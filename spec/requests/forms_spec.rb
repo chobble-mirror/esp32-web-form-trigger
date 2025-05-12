@@ -1,17 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Forms", type: :request do
-  let!(:form) do 
-    Form.create!(
-      background_color: "#ffffff",
-      text_color: "#000000",
-      button_color: "#0000ff",
-      button_text_color: "#ffffff",
-      button_text: "Submit",
-      header_text: "Test form",
-      target_email_address: "test@example.com"
-    )
-  end
+  let!(:form) { create_test_form }
   
   describe "authorization" do
     context "when not logged in" do
@@ -32,11 +22,7 @@ RSpec.describe "Forms", type: :request do
 
       it "redirects to login for create" do
         post forms_path, params: { 
-          form: { 
-            button_text: "New Form",
-            header_text: "New Header",
-            target_email_address: "new@example.com"
-          } 
+          form: valid_form_attributes
         }
         expect(response).to redirect_to(login_path)
       end
@@ -74,11 +60,7 @@ RSpec.describe "Forms", type: :request do
 
       it "redirects to root for create" do
         post forms_path, params: { 
-          form: { 
-            button_text: "New Form",
-            header_text: "New Header",
-            target_email_address: "new@example.com"
-          } 
+          form: valid_form_attributes
         }
         expect(response).to redirect_to(root_path)
       end
@@ -113,15 +95,18 @@ RSpec.describe "Forms", type: :request do
         get edit_form_path(form)
         expect(response).to have_http_status(:success)
       end
+      
+      it "displays device links on the edit page" do
+        device = Device.create!(name: "Test Device", location: "Test Location")
+        get edit_form_path(form)
+        expect(response.body).to include(public_form_path(form.id, device.id))
+        expect(response.body).to include("Test Device")
+      end
 
       it "allows form creation" do
         expect {
           post forms_path, params: { 
-            form: { 
-              button_text: "New Form",
-              header_text: "New Header",
-              target_email_address: "new@example.com"
-            } 
+            form: valid_form_attributes
           }
         }.to change(Form, :count).by(1)
         expect(response).to have_http_status(:redirect)

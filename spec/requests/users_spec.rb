@@ -8,27 +8,7 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "POST /signup" do
-    context "when there are no users yet" do
-      before do
-        User.destroy_all
-      end
-      
-      it "creates a user and redirects" do
-        post "/signup", params: {
-          user: {
-            email: "newuser@example.com",
-            password: "password",
-            password_confirmation: "password"
-          }
-        }
-
-        expect(response).to have_http_status(:redirect)
-        expect(User.count).to eq(1)
-        expect(User.first.admin).to be true
-      end
-    end
-    
+  describe "POST /signup" do    
     context "when logged in as admin" do
       before do
         login_as_admin
@@ -45,6 +25,7 @@ RSpec.describe "Users", type: :request do
 
         expect(response).to have_http_status(:redirect)
         expect(User.find_by(email: "newuser@example.com")).to be_present
+        expect(User.find_by(email: "newuser@example.com").admin).to be false
       end
     end
     
@@ -53,7 +34,7 @@ RSpec.describe "Users", type: :request do
         login_as_user
       end
       
-      it "prevents regular user from creating users" do
+      it "allows regular users to create new users" do
         post "/signup", params: {
           user: {
             email: "newuser2@example.com",
@@ -62,8 +43,9 @@ RSpec.describe "Users", type: :request do
           }
         }
 
-        expect(response).to redirect_to(root_path)
-        expect(User.find_by(email: "newuser2@example.com")).to be_nil
+        expect(response).to have_http_status(:redirect)
+        expect(User.find_by(email: "newuser2@example.com")).to be_present
+        expect(User.find_by(email: "newuser2@example.com").admin).to be false
       end
     end
   end

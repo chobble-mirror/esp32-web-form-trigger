@@ -1,0 +1,127 @@
+<h1>Email Queue Status</h1>
+
+<section>
+  <h2>Pending Emails (<%= @pending_jobs.count %>)</h2>
+  <% if @pending_jobs.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Queue</th>
+          <th>Created At</th>
+          <th>Scheduled At</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pending_jobs.each do |job| %>
+          <tr>
+            <td><%= job.id %></td>
+            <td><%= job.queue_name %></td>
+            <td><%= job.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td><%= job.scheduled_at&.strftime("%Y-%m-%d %H:%M:%S") || "Immediate" %></td>
+            <td>
+              <% if job.scheduled_at && job.scheduled_at > Time.current %>
+                Scheduled
+              <% else %>
+                Processing
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No pending emails in the queue.</p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Failed Submissions</h2>
+  <% if @failed_submissions.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Form</th>
+          <th>Device</th>
+          <th>Recipient</th>
+          <th>Submitted At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @failed_submissions.each do |submission| %>
+          <tr>
+            <td><%= link_to submission.id, submission_path(submission) %></td>
+            <td><%= submission.form.name %></td>
+            <td><%= submission.device.name %></td>
+            <td><%= submission.form.target_email_address %></td>
+            <td><%= submission.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td>
+              <%= button_to "Retry", retry_email_queue_path(submission), method: :post, data: { turbo_confirm: "Retry sending this email?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No failed email submissions.</p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Failed Jobs</h2>
+  <% if @failed_jobs.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Failed At</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @failed_jobs.each do |failed| %>
+          <tr>
+            <td><%= failed.job_id %></td>
+            <td><%= failed.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td><pre><%= failed.error %></pre></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No failed jobs in the queue.</p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Recent Completed Emails</h2>
+  <% if @completed_jobs.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Queue</th>
+          <th>Created At</th>
+          <th>Completed At</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @completed_jobs.each do |job| %>
+          <tr>
+            <td><%= job.id %></td>
+            <td><%= job.queue_name %></td>
+            <td><%= job.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td><%= job.finished_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td><%= ((job.finished_at - job.created_at) * 1000).round %>ms</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No completed email jobs.</p>
+  <% end %>
+</section>

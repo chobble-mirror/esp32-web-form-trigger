@@ -5,18 +5,20 @@ RSpec.describe "Admin User Management", type: :request do
     # Clear all users
     User.destroy_all
 
-    # Create admin user (first user)
+    # Create admin user
     @admin = User.create!(
-      email: "admin@example.com",
+      email: "stefan@chobble.com",
       password: "password",
-      password_confirmation: "password"
+      password_confirmation: "password",
+      admin: true
     )
 
     # Create regular user
     @regular_user = User.create!(
       email: "regular@example.com",
       password: "password",
-      password_confirmation: "password"
+      password_confirmation: "password",
+      admin: false
     )
   end
 
@@ -33,6 +35,18 @@ RSpec.describe "Admin User Management", type: :request do
     it "can edit other users" do
       get edit_user_path(@regular_user)
       expect(response).to have_http_status(:success)
+    end
+
+    it "can change admin status of other users" do
+      patch user_path(@regular_user), params: { user: { admin: true } }
+      expect(response).to redirect_to(users_path)
+      expect(@regular_user.reload.admin).to be_truthy
+    end
+
+    it "cannot change own admin status" do
+      original_admin_status = @admin.admin
+      patch user_path(@admin), params: { user: { admin: false } }
+      expect(@admin.reload.admin).to eq(original_admin_status)
     end
   end
 

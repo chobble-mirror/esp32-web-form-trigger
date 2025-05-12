@@ -85,6 +85,27 @@ footer {
   text-align: center;
 }
 
+.filters {
+  margin-bottom: 1.5rem;
+}
+
+.filter-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filter-links a {
+  text-decoration: none;
+}
+
+.filter-links a.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 h1 {
   font-size: 1.6rem;
 }
@@ -96,4 +117,27 @@ h2 {
 h3,
 h4 {
   font-size: 1.2rem;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.public-form {
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+}
+
+.public-form form {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.public-form input,
+textarea {
+  border-radius: 5px;
+  margin-bottom: 2rem;
 }

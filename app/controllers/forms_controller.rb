@@ -12,6 +12,7 @@ class FormsController < ApplicationController
   end
 
   def edit
+    @submissions = @form.submissions.order(created_at: :desc).limit(5)
   end
 
   def create

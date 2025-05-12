@@ -2,17 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Submissions", type: :request do
   let!(:device) { Device.create!(name: "Test Device", location: "Test Location") }
-  let!(:form) do 
-    Form.create!(
-      background_color: "#ffffff",
-      text_color: "#000000",
-      button_color: "#0000ff",
-      button_text_color: "#ffffff",
-      button_text: "Submit",
-      header_text: "Test form",
-      target_email_address: "test@example.com"
-    )
-  end
+  let!(:form) { create_test_form }
   let!(:submission) do
     Submission.create!(
       device: device,

@@ -18,6 +18,14 @@
   <%= form.label :email %>
   <%= form.email_field :email %>
 
+  <% if current_user.admin? %>
+    <div>
+      <%= form.label :admin, "Admin User" %>
+      <%= form.radio_button :admin, true, disabled: (@user == current_user), checked: @user.admin? %> Yes
+      <%= form.radio_button :admin, false, disabled: (@user == current_user), checked: !@user.admin? %> No
+    </div>
+  <% end %>
+
   <%= form.label :password, "New Password (leave blank if no change)" %>
   <%= form.password_field :password %>
 

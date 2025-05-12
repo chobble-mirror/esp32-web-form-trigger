@@ -2,7 +2,7 @@
   <h1>Submission Details</h1>
 </header>
 
-<section>
+<article>
   <h2>Submission Information</h2>
   <dl>
     <dt>Submitted On</dt>
@@ -19,15 +19,15 @@
 
     <dt>Email Status</dt>
     <dd><%= @submission.email_status %></dd>
-    
+
     <% if @submission.emailed_at.present? %>
       <dt>Email Sent</dt>
       <dd><%= @submission.emailed_at.strftime("%Y-%m-%d %H:%M") %></dd>
     <% end %>
   </dl>
-</section>
+</article>
 
-<section>
+<article>
   <h2>Contact Information</h2>
   <dl>
     <% if @submission.name.present? %>
@@ -39,26 +39,20 @@
       <dt>Email</dt>
       <dd><%= @submission.email_address %></dd>
     <% end %>
-    
+
     <% if @submission.phone.present? %>
       <dt>Phone</dt>
       <dd><%= @submission.phone %></dd>
     <% end %>
-    
+
     <% if @submission.address.present? %>
       <dt>Address</dt>
       <dd><%= @submission.address %></dd>
     <% end %>
-    
+
     <% if @submission.postcode.present? %>
       <dt>Postcode</dt>
       <dd><%= @submission.postcode %></dd>
     <% end %>
   </dl>
-</section>
-
-<div>
-  <%= link_to submissions_path do %>
-    <em>Back to Submissions</em>
-  <% end %>
-</div>
+</article>

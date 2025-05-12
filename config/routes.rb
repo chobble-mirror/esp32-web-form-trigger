@@ -58,6 +58,13 @@ Rails.application.routes.draw do
   # Images admin
   get "images/all", to: "images#all"
   get "images/orphaned", to: "images#orphaned"
+  
+  # Email queue monitoring
+  resources :email_queues, only: [:index] do
+    member do
+      post :retry
+    end
+  end
 
   # Short URL for certificates
   get "c/:id", to: "inspections#certificate", as: "short_certificate"

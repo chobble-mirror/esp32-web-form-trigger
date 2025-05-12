@@ -24,29 +24,17 @@ class UsersController < ApplicationController
   end
 
   def create
-    # Only allow user creation if:
-    # 1. There are no users yet (first user becomes admin via callback in User model)
-    # 2. The current user is an admin
-    if User.count == 0 || current_user&.admin?
-      @user = User.new(user_params)
-      if @user.save
-        if Rails.env.production?
-          NtfyService.notify("new user: #{@user.email}")
-        end
-
-        # Auto-login the user if this is the first user
-        if User.count == 1
-          log_in @user
-        end
-        
-        flash[:success] = "Account created"
-        redirect_to current_user&.admin? ? users_path : root_path
-      else
-        render :new, status: :unprocessable_entity
+    @user = User.new(user_params)
+    if @user.save
+      if Rails.env.production?
+        NtfyService.notify("new user: #{@user.email}")
       end
-    else
-      flash[:danger] = "Only administrators can create new users"
+
+      log_in @user
+      flash[:success] = "Account created"
       redirect_to root_path
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -54,7 +42,14 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
+    update_params = user_params
+    
+    # Prevent admin users from changing their own admin status
+    if current_user == @user && current_user.admin?
+      update_params = update_params.except(:admin)
+    end
+    
+    if @user.update(update_params)
       flash[:success] = "User updated"
       redirect_to users_path
     else
@@ -98,16 +93,23 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    # Admin can set all fields
     if current_user&.admin?
-      params.require(:user).permit(:email, :password, :password_confirmation, :admin)
-    # First user signup
-    elsif User.count == 0
-      params.require(:user).permit(:email, :password, :password_confirmation)
-    # Regular users can't update anything except through change_password
+      # Admins can set email, admin status, and password
+      params.require(:user).permit(
+        :email,
+        :password,
+        :password_confirmation,
+        :admin
+      )
+    elsif action_name == 'create'
+      # For new user registration, allow email and password
+      params.require(:user).permit(
+        :email,
+        :password,
+        :password_confirmation
+      )
     else
-      # This should never be called directly for regular users due to before_action filters
-      # But as an added security measure, don't permit any parameters
+      # Regular users can only update their password
       params.require(:user).permit(:password, :password_confirmation)
     end
   end
@@ -124,12 +126,12 @@ class UsersController < ApplicationController
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
   end
-  
+
   def restrict_regular_user_update
     # Regular users can't update users at all (handled by require_admin)
     # This is just an extra safety measure
     return if current_user&.admin?
-    
+
     # If somehow a non-admin tries to update users, we should block it
     flash[:danger] = "You do not have permission to modify user information"
     redirect_to root_path

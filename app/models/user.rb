@@ -3,12 +3,13 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
   validates :password, presence: true, length: {minimum: 6}, if: :password_digest_changed?
-
-  before_create :set_admin_if_first_user
-
+  
+  before_create :make_first_user_admin
+  
   private
-
-  def set_admin_if_first_user
-    self.admin = User.count.zero?
+  
+  def make_first_user_admin
+    # If this is the first user, make them an admin
+    self.admin = true if User.count.zero?
   end
 end

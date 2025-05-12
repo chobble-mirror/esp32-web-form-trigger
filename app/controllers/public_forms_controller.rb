@@ -15,11 +15,12 @@ class PublicFormsController < ApplicationController
     if @submission.save
       # Send the submission email
       begin
-        SubmissionMailer.new_submission(@submission).deliver_now
-        @submission.mark_as_emailed!
+        SubmissionMailer.new_submission(@submission).deliver_later
+        # Email will be sent asynchronously, so we mark it as pending
+        # It will be updated when the job completes
       rescue => e
         # Log the error but continue with the form submission
-        Rails.logger.error "Failed to send submission email: #{e.message}"
+        Rails.logger.error "Failed to queue submission email: #{e.message}"
         @submission.mark_as_failed!
       end
       

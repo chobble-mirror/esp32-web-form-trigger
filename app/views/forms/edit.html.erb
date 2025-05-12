@@ -7,3 +7,30 @@
 <%= button_to form_path(@form), method: :delete, form: { data: { turbo_confirm: "Are you sure?" } } do %>
   Delete
 <% end %>
+
+<section>
+  <h2>Device Links</h2>
+  <p>Here are public links to this form for all devices:</p>
+  
+  <% if Device.where(archived: false).any? %>
+    <ul>
+      <% Device.where(archived: false).each do |device| %>
+        <li>
+          <%= link_to device.name, public_form_path(@form.id, device.id), target: "_blank" %>
+          <small><%= device.location %></small>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No active devices available. <%= link_to "Create a device", new_device_path %> first.</p>
+  <% end %>
+</section>
+
+<section>
+  <h3>Latest Submissions</h3>
+  <%= render 'submissions/list', submissions: @submissions %>
+  
+  <% if @submissions.any? %>
+    <p><%= link_to "View all submissions", submissions_path %></p>
+  <% end %>
+</section>

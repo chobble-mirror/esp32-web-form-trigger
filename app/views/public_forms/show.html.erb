@@ -3,7 +3,7 @@
     background-color: <%= @form.background_color %>;
     color: <%= @form.text_color %>;
   }
-  
+
   input[type="submit"] {
     background-color: <%= @form.button_color %>;
     border-color: <%= @form.button_color %>;
@@ -15,69 +15,67 @@
   <% if @form.header_image.attached? %>
     <%= image_tag url_for(@form.header_image) %>
   <% end %>
-  
+
   <div>
     <%= markdown(@form.header_text) %>
   </div>
 </header>
 
-<main>
-  <%= form_with(model: @submission, url: public_form_path(@form.id, @device.id), method: :post) do |f| %>
-    <% if @submission.errors.any? %>
-      <div>
-        <h2><%= pluralize(@submission.errors.count, "error") %> prohibited this submission from being saved:</h2>
-        <ul>
-          <% @submission.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-    
-    <% if @form.enable_name %>
-      <div>
-        <%= f.label :name %>
-        <%= f.text_field :name, required: @form.enable_name %>
-      </div>
-    <% end %>
-    
-    <% if @form.enable_email_address %>
-      <div>
-        <%= f.label :email_address %>
-        <%= f.email_field :email_address, required: @form.enable_email_address %>
-      </div>
-    <% end %>
-    
-    <% if @form.enable_phone %>
-      <div>
-        <%= f.label :phone %>
-        <%= f.telephone_field :phone, required: @form.enable_phone %>
-      </div>
-    <% end %>
-    
-    <% if @form.enable_address %>
-      <div>
-        <%= f.label :address %>
-        <%= f.text_area :address, rows: 3, required: @form.enable_address %>
-      </div>
-    <% end %>
-    
-    <% if @form.enable_postcode %>
-      <div>
-        <%= f.label :postcode %>
-        <%= f.text_field :postcode, required: @form.enable_postcode %>
-      </div>
-    <% end %>
-    
-    <% if @form.terms_and_conditions.present? %>
-      <div>
-        <h3>Terms & Conditions</h3>
-        <%= markdown(@form.terms_and_conditions) %>
-      </div>
-    <% end %>
-    
+<%= form_with(model: @submission, url: public_form_path(@form.id, @device.id), method: :post) do |f| %>
+  <% if @submission.errors.any? %>
     <div>
-      <%= f.submit @form.button_text %>
+      <h2><%= pluralize(@submission.errors.count, "error") %> prohibited this submission from being saved:</h2>
+      <ul>
+        <% @submission.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
-</main>
+
+  <% if @form.enable_name %>
+    <div>
+      <%= f.label :name %>
+      <%= f.text_field :name, required: @form.enable_name %>
+    </div>
+  <% end %>
+
+  <% if @form.enable_email_address %>
+    <div>
+      <%= f.label :email_address %>
+      <%= f.email_field :email_address, required: @form.enable_email_address %>
+    </div>
+  <% end %>
+
+  <% if @form.enable_phone %>
+    <div>
+      <%= f.label :phone %>
+      <%= f.telephone_field :phone, required: @form.enable_phone %>
+    </div>
+  <% end %>
+
+  <% if @form.enable_address %>
+    <div>
+      <%= f.label :address %>
+      <%= f.text_area :address, rows: 3, required: @form.enable_address %>
+    </div>
+  <% end %>
+
+  <% if @form.enable_postcode %>
+    <div>
+      <%= f.label :postcode %>
+      <%= f.text_field :postcode, required: @form.enable_postcode %>
+    </div>
+  <% end %>
+
+  <% if @form.terms_and_conditions.present? %>
+    <div>
+      <h3>Terms & Conditions</h3>
+      <%= markdown(@form.terms_and_conditions) %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.submit @form.button_text %>
+  </div>
+<% end %>

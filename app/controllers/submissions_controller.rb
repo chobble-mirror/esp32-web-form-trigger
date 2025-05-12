@@ -6,7 +6,20 @@ class SubmissionsController < ApplicationController
   before_action :set_submission, only: [:show]
   
   def index
-    @submissions = Submission.includes(:form, :device).order(created_at: :desc)
+    @forms = Form.all.includes(:submissions)
+    @form_counts = Form.joins(:submissions)
+                       .group('forms.id')
+                       .count('submissions.id')
+    @total_count = Submission.count
+    
+    # Apply form filter if specified
+    base_query = Submission.includes(:form, :device)
+    if params[:form_id].present?
+      @form = Form.find(params[:form_id])
+      @submissions = base_query.where(form_id: params[:form_id]).order(created_at: :desc)
+    else
+      @submissions = base_query.order(created_at: :desc)
+    end
     
     respond_to do |format|
       format.html

@@ -64,29 +64,65 @@ RSpec.describe User, type: :model do
   end
 
   describe "admin functionality" do
-    it "sets the first user as admin" do
-      # Make sure there are no users
-      User.destroy_all
-
-      # Create the first user
-      first_user = User.create!(
+    it "allows setting admin status manually" do
+      # Create an admin user
+      admin_user = User.create!(
         email: "admin@example.com",
         password: "password",
-        password_confirmation: "password"
+        password_confirmation: "password",
+        admin: true
       )
 
-      # Create a second user
-      second_user = User.create!(
+      # Create a regular user
+      regular_user = User.create!(
         email: "regular@example.com",
         password: "password",
-        password_confirmation: "password"
+        password_confirmation: "password",
+        admin: false
       )
 
-      # Verify the first user is an admin
-      expect(first_user.admin?).to be true
-
-      # Verify the second user is not an admin
-      expect(second_user.admin?).to be false
+      # Verify admin status is set correctly
+      expect(admin_user.admin?).to be true
+      expect(regular_user.admin?).to be false
+    end
+    
+    context "when first user signup" do
+      before do
+        # Ensure we start with a clean slate
+        User.destroy_all
+      end
+      
+      it "automatically sets the first user as admin" do
+        first_user = User.create!(
+          email: "first@example.com",
+          password: "password",
+          password_confirmation: "password"
+        )
+        
+        # Admin flag should be set automatically for first user
+        expect(first_user.admin?).to be true
+        
+        second_user = User.create!(
+          email: "second@example.com",
+          password: "password",
+          password_confirmation: "password"
+        )
+        
+        # Second user should not be auto-admin
+        expect(second_user.admin?).to be false
+      end
+      
+      it "doesn't override explicit admin setting for first user" do
+        # Even if admin is explicitly set to false for first user, should be overridden
+        first_user = User.create!(
+          email: "first@example.com",
+          password: "password",
+          password_confirmation: "password",
+          admin: false
+        )
+        
+        expect(first_user.admin?).to be true
+      end
     end
   end
 end

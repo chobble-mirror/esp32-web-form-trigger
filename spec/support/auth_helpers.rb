@@ -1,29 +1,36 @@
 module AuthHelpers
   def login_as_admin
-    # Make sure to clear users first to avoid issues with first user being admin
-    User.destroy_all
+    # Create admin user if it doesn't exist
+    admin = User.find_by(email: "stefan@chobble.com")
     
-    admin = User.create!(
-      email: "admin_#{Time.now.to_i}@example.com",
-      password: "password123",
-      password_confirmation: "password123",
-      admin: true
-    )
-    post login_path, params: { session: { email: admin.email, password: "password123" } }
+    unless admin
+      admin = User.create!(
+        email: "stefan@chobble.com",
+        password: "password",
+        password_confirmation: "password",
+        admin: true
+      )
+    end
+    
+    post login_path, params: { session: { email: admin.email, password: "password" } }
     expect(session[:user_id]).to eq(admin.id)
     admin
   end
 
   def login_as_user
-    # Create admin first
-    admin = User.create!(
-      email: "admin_#{Time.now.to_i}@example.com",
-      password: "password123",
-      password_confirmation: "password123",
-      admin: true
-    )
+    # Make sure admin exists
+    admin = User.find_by(email: "stefan@chobble.com")
     
-    # Then create regular user
+    unless admin
+      admin = User.create!(
+        email: "stefan@chobble.com",
+        password: "password",
+        password_confirmation: "password",
+        admin: true
+      )
+    end
+    
+    # Create regular user
     user = User.create!(
       email: "user_#{Time.now.to_i}@example.com",
       password: "password123",

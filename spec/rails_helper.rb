@@ -33,8 +33,9 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
-  # Include auth helpers in request specs
+  # Include helpers in request specs
   config.include AuthHelpers, type: :request
+  config.include FormHelpers, type: :request
   
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [

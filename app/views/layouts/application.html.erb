@@ -22,25 +22,30 @@
     <% if current_user %>
       <nav>
         <ul>
-          <li>
-            <%= link_to devices_path do %>
-              <strong>Devices</strong>
-            <% end %>
-          </li>
-          <li>
-            <%= link_to forms_path do %>
-              <strong>Forms</strong>
-            <% end %>
-          </li>
-          <li>
-            <%= link_to submissions_path do %>
-              <strong>Submissions</strong>
-            <% end %>
-          </li>
           <% if current_user.admin? %>
+            <li>
+              <%= link_to devices_path do %>
+                <strong>Devices</strong>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to forms_path do %>
+                <strong>Forms</strong>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to submissions_path do %>
+                <strong>Submissions</strong>
+              <% end %>
+            </li>
             <li>
               <%= link_to users_path do %>
                 <strong>Users</strong>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to email_queues_path do %>
+                <strong>Email Queue</strong>
               <% end %>
             </li>
           <% end %>

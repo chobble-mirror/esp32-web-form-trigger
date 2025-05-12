@@ -2,20 +2,20 @@
   <h1>Devices</h1>
 </header>
 
+
+<section class="filters">
+  <div class="filter-links">
+    <strong>Filter:</strong>
+    <%= link_to "all (#{@total_count})", devices_path(filter: 'all'), class: @filter == 'all' ? 'active' : '' %>
+    / <%= link_to "active (#{@total_count - @archived_count})", devices_path(filter: 'active'), class: @filter == 'active' ? 'active' : '' %>
+    / <%= link_to "archived (#{@archived_count})", devices_path(filter: 'archived'), class: @filter == 'archived' ? 'active' : '' %>
+  </div>
+</section>
+
 <section>
   <%= link_to new_device_path do %>
     <strong>New Device</strong>
   <% end %>
-</section>
-
-<section>
-  <nav>
-    <%= link_to "Active (#{@total_count - @archived_count})", devices_path(filter: 'active'), class: @filter == 'active' ? 'active' : '' %>
-    /
-    <%= link_to "All (#{@total_count})", devices_path(filter: 'all'), class: @filter == 'all' ? 'active' : '' %>
-    /
-    <%= link_to "Archived (#{@archived_count})", devices_path(filter: 'archived'), class: @filter == 'archived' ? 'active' : '' %>
-  </nav>
 </section>
 
 <% if @devices.any? %>
