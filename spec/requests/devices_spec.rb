@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Devices", type: :request do
   let!(:device) { Device.create!(name: "Test Device", location: "Test Location") }
-  
+
   describe "authorization" do
     context "when not logged in" do
       it "redirects to login for index" do
@@ -21,12 +21,12 @@ RSpec.describe "Devices", type: :request do
       end
 
       it "redirects to login for create" do
-        post devices_path, params: { device: { name: "New Device", location: "New Location" } }
+        post devices_path, params: {device: {name: "New Device", location: "New Location"}}
         expect(response).to redirect_to(login_path)
       end
 
       it "redirects to login for update" do
-        patch device_path(device), params: { device: { name: "Updated Device" } }
+        patch device_path(device), params: {device: {name: "Updated Device"}}
         expect(response).to redirect_to(login_path)
       end
 
@@ -55,12 +55,12 @@ RSpec.describe "Devices", type: :request do
       end
 
       it "redirects to root for create" do
-        post devices_path, params: { device: { name: "New Device", location: "New Location" } }
+        post devices_path, params: {device: {name: "New Device", location: "New Location"}}
         expect(response).to redirect_to(root_path)
       end
 
       it "redirects to root for update" do
-        patch device_path(device), params: { device: { name: "Updated Device" } }
+        patch device_path(device), params: {device: {name: "Updated Device"}}
         expect(response).to redirect_to(root_path)
       end
 
@@ -90,13 +90,13 @@ RSpec.describe "Devices", type: :request do
 
       it "allows device creation" do
         expect {
-          post devices_path, params: { device: { name: "New Device", location: "New Location" } }
+          post devices_path, params: {device: {name: "New Device", location: "New Location"}}
         }.to change(Device, :count).by(1)
         expect(response).to have_http_status(:redirect)
       end
 
       it "allows device update" do
-        patch device_path(device), params: { device: { name: "Updated Device" } }
+        patch device_path(device), params: {device: {name: "Updated Device"}}
         expect(device.reload.name).to eq("Updated Device")
         expect(response).to have_http_status(:redirect)
       end

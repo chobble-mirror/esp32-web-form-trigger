@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Forms", type: :request do
   let!(:form) { create_test_form }
-  
+
   describe "authorization" do
     context "when not logged in" do
       it "redirects to login for index" do
@@ -21,15 +21,15 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "redirects to login for create" do
-        post forms_path, params: { 
+        post forms_path, params: {
           form: valid_form_attributes
         }
         expect(response).to redirect_to(login_path)
       end
 
       it "redirects to login for update" do
-        patch form_path(form), params: { 
-          form: { button_text: "Updated Form" } 
+        patch form_path(form), params: {
+          form: {button_text: "Updated Form"}
         }
         expect(response).to redirect_to(login_path)
       end
@@ -59,15 +59,15 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "redirects to root for create" do
-        post forms_path, params: { 
+        post forms_path, params: {
           form: valid_form_attributes
         }
         expect(response).to redirect_to(root_path)
       end
 
       it "redirects to root for update" do
-        patch form_path(form), params: { 
-          form: { button_text: "Updated Form" } 
+        patch form_path(form), params: {
+          form: {button_text: "Updated Form"}
         }
         expect(response).to redirect_to(root_path)
       end
@@ -95,7 +95,7 @@ RSpec.describe "Forms", type: :request do
         get edit_form_path(form)
         expect(response).to have_http_status(:success)
       end
-      
+
       it "displays device links on the edit page" do
         device = Device.create!(name: "Test Device", location: "Test Location")
         get edit_form_path(form)
@@ -105,7 +105,7 @@ RSpec.describe "Forms", type: :request do
 
       it "allows form creation" do
         expect {
-          post forms_path, params: { 
+          post forms_path, params: {
             form: valid_form_attributes
           }
         }.to change(Form, :count).by(1)
@@ -113,8 +113,8 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "allows form update" do
-        patch form_path(form), params: { 
-          form: { button_text: "Updated Form" } 
+        patch form_path(form), params: {
+          form: {button_text: "Updated Form"}
         }
         expect(form.reload.button_text).to eq("Updated Form")
         expect(response).to have_http_status(:redirect)

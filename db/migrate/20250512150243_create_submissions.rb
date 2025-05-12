@@ -11,10 +11,10 @@ class CreateSubmissions < ActiveRecord::Migration[8.0]
       t.boolean :credit_claimed, default: false
       t.string :email_status, default: "pending"
       t.datetime :emailed_at
-      
+
       t.timestamps
     end
-    
+
     add_index :submissions, [:device_id, :credit_claimed], name: "index_submissions_on_device_and_credit"
   end
 end

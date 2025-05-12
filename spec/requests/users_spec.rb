@@ -8,12 +8,12 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "POST /signup" do    
+  describe "POST /signup" do
     context "when logged in as admin" do
       before do
         login_as_admin
       end
-      
+
       it "allows admin to create a new user" do
         post "/signup", params: {
           user: {
@@ -28,12 +28,12 @@ RSpec.describe "Users", type: :request do
         expect(User.find_by(email: "newuser@example.com").admin).to be false
       end
     end
-    
+
     context "when logged in as regular user" do
       before do
         login_as_user
       end
-      
+
       it "allows regular users to create new users" do
         post "/signup", params: {
           user: {
@@ -51,7 +51,7 @@ RSpec.describe "Users", type: :request do
   end
 
   # User permission tests related to admin access have been moved to admin_permissions_spec.rb
-  
+
   describe "password change functionality" do
     let(:user) { User.create!(email: "user@example.com", password: "password", password_confirmation: "password") }
     let(:admin) { User.create!(email: "admin@example.com", password: "password", password_confirmation: "password", admin: true) }

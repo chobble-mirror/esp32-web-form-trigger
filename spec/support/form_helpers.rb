@@ -10,18 +10,18 @@ module FormHelpers
       header_text: "Test form",
       target_email_address: "test@example.com"
     }
-    
+
     Form.create!(default_attributes.merge(attributes))
   end
 
   def valid_form_attributes(attributes = {})
     default_attributes = {
-      name: "New Form", 
+      name: "New Form",
       button_text: "New Form",
       header_text: "New Header",
       target_email_address: "new@example.com"
     }
-    
+
     default_attributes.merge(attributes)
   end
 end

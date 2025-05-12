@@ -43,12 +43,12 @@ class UsersController < ApplicationController
 
   def update
     update_params = user_params
-    
+
     # Prevent admin users from changing their own admin status
     if current_user == @user && current_user.admin?
       update_params = update_params.except(:admin)
     end
-    
+
     if @user.update(update_params)
       flash[:success] = "User updated"
       redirect_to users_path
@@ -101,7 +101,7 @@ class UsersController < ApplicationController
         :password_confirmation,
         :admin
       )
-    elsif action_name == 'create'
+    elsif action_name == "create"
       # For new user registration, allow email and password
       params.require(:user).permit(
         :email,

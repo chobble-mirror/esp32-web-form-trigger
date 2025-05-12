@@ -3,16 +3,16 @@ class DevicesController < ApplicationController
   before_action :require_admin
 
   def index
-    @filter = params[:filter] || 'active'
+    @filter = params[:filter] || "active"
     @total_count = Device.count
     @archived_count = Device.where(archived: true).count
-    
-    if @filter == 'all'
-      @devices = Device.all.order(created_at: :desc)
-    elsif @filter == 'archived'
-      @devices = Device.where(archived: true).order(created_at: :desc)
+
+    @devices = if @filter == "all"
+      Device.all.order(created_at: :desc)
+    elsif @filter == "archived"
+      Device.where(archived: true).order(created_at: :desc)
     else
-      @devices = Device.where(archived: false).order(created_at: :desc)
+      Device.where(archived: false).order(created_at: :desc)
     end
   end
 
@@ -24,7 +24,7 @@ class DevicesController < ApplicationController
     @device = Device.new(device_params)
 
     if @device.save
-      redirect_to @device, notice: 'Device was successfully created.'
+      redirect_to @device, notice: "Device was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class DevicesController < ApplicationController
 
   def update
     if @device.update(device_params)
-      redirect_to @device, notice: 'Device was successfully updated.'
+      redirect_to @device, notice: "Device was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -43,12 +43,12 @@ class DevicesController < ApplicationController
 
   def archive
     @device.update(archived: true)
-    redirect_to devices_path, notice: 'Device was successfully archived.', status: :see_other
+    redirect_to devices_path, notice: "Device was successfully archived.", status: :see_other
   end
-  
+
   def unarchive
     @device.update(archived: false)
-    redirect_to devices_path, notice: 'Device was successfully restored.', status: :see_other
+    redirect_to devices_path, notice: "Device was successfully restored.", status: :see_other
   end
 
   private

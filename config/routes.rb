@@ -7,12 +7,12 @@ Rails.application.routes.draw do
   end
   resources :forms
   resources :submissions, only: [:index, :show]
-  
+
   # Public form routes
   get "form/:form_id/:device_id", to: "public_forms#show", as: "public_form"
   post "form/:form_id/:device_id", to: "public_forms#create"
   get "form/:form_id/:device_id/thanks", to: "public_forms#thanks", as: "form_thanks"
-  
+
   # API endpoints
   namespace :api do
     namespace :v1 do
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       post "credits/claim/:device_id", to: "credits#claim"
     end
   end
-  
+
   get "up" => "rails/health#show", :as => :rails_health_check
 
   get "service-worker" => "rails/pwa#service_worker", :as => :pwa_service_worker
@@ -58,7 +58,7 @@ Rails.application.routes.draw do
   # Images admin
   get "images/all", to: "images#all"
   get "images/orphaned", to: "images#orphaned"
-  
+
   # Email queue monitoring
   resources :email_queues, only: [:index] do
     member do
