@@ -24,12 +24,6 @@ class UsersController < ApplicationController
   end
 
   def create
-<<<<<<< HEAD
-    @user = User.new(user_params)
-    if @user.save
-      if Rails.env.production?
-        NtfyService.notify("new user: #{@user.email}")
-=======
     # Only allow user creation if:
     # 1. There are no users yet (first user becomes admin via callback in User model)
     # 2. The current user is an admin
@@ -49,14 +43,11 @@ class UsersController < ApplicationController
         redirect_to current_user&.admin? ? users_path : root_path
       else
         render :new, status: :unprocessable_entity
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
       end
-
-      log_in @user
-      flash[:success] = "Account created"
-      redirect_to root_path
     else
-      render :new, status: :unprocessable_entity
+      # Unauthorized user creation attempt
+      flash[:danger] = "You are not authorized to create new users"
+      redirect_to root_path
     end
   end
 

@@ -1,11 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Forms", type: :request do
-<<<<<<< HEAD
-  let!(:form) { create_test_form }
-=======
   let!(:form) do
     Form.create!(
+      name: "Test Form",
       background_color: "#ffffff",
       text_color: "#000000",
       button_color: "#0000ff",
@@ -15,7 +13,6 @@ RSpec.describe "Forms", type: :request do
       target_email_address: "test@example.com"
     )
   end
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
 
   describe "authorization" do
     context "when not logged in" do
@@ -36,15 +33,12 @@ RSpec.describe "Forms", type: :request do
 
       it "redirects to login for create" do
         post forms_path, params: {
-<<<<<<< HEAD
-          form: valid_form_attributes
-=======
           form: {
+            name: "New Form",
             button_text: "New Form",
             header_text: "New Header",
             target_email_address: "new@example.com"
           }
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
         }
         expect(response).to redirect_to(login_path)
       end
@@ -82,15 +76,12 @@ RSpec.describe "Forms", type: :request do
 
       it "redirects to root for create" do
         post forms_path, params: {
-<<<<<<< HEAD
-          form: valid_form_attributes
-=======
           form: {
+            name: "New Form",
             button_text: "New Form",
             header_text: "New Header",
             target_email_address: "new@example.com"
           }
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
         }
         expect(response).to redirect_to(root_path)
       end
@@ -136,15 +127,12 @@ RSpec.describe "Forms", type: :request do
       it "allows form creation" do
         expect {
           post forms_path, params: {
-<<<<<<< HEAD
-            form: valid_form_attributes
-=======
             form: {
+              name: "New Form",
               button_text: "New Form",
               header_text: "New Header",
               target_email_address: "new@example.com"
             }
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
           }
         }.to change(Form, :count).by(1)
         expect(response).to have_http_status(:redirect)

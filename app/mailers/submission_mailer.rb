@@ -13,7 +13,6 @@ class SubmissionMailer < ApplicationMailer
       subject: "New form submission from #{@device.name}"
     )
   end
-<<<<<<< HEAD
 
   private
 
@@ -26,6 +25,4 @@ class SubmissionMailer < ApplicationMailer
     EmailDeliveryCallbackJob.perform_later(@submission.id, "failed")
     raise exception # Re-raise so that the job can be retried
   end
-=======
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
 end

@@ -9,8 +9,6 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "POST /signup" do
-<<<<<<< HEAD
-=======
     context "when there are no users yet" do
       before do
         User.destroy_all
@@ -30,8 +28,6 @@ RSpec.describe "Users", type: :request do
         expect(User.first.admin).to be true
       end
     end
-
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
     context "when logged in as admin" do
       before do
         login_as_admin
@@ -57,11 +53,7 @@ RSpec.describe "Users", type: :request do
         login_as_user
       end
 
-<<<<<<< HEAD
-      it "allows regular users to create new users" do
-=======
       it "prevents regular user from creating users" do
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
         post "/signup", params: {
           user: {
             email: "newuser2@example.com",
@@ -71,8 +63,7 @@ RSpec.describe "Users", type: :request do
         }
 
         expect(response).to have_http_status(:redirect)
-        expect(User.find_by(email: "newuser2@example.com")).to be_present
-        expect(User.find_by(email: "newuser2@example.com").admin).to be false
+        expect(User.find_by(email: "newuser2@example.com")).to be_nil
       end
     end
   end

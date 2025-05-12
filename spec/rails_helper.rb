@@ -35,10 +35,7 @@ end
 RSpec.configure do |config|
   # Include helpers in request specs
   config.include AuthHelpers, type: :request
-<<<<<<< HEAD
   config.include FormHelpers, type: :request
-=======
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [

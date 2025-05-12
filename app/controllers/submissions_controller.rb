@@ -6,7 +6,6 @@ class SubmissionsController < ApplicationController
   before_action :set_submission, only: [:show]
 
   def index
-<<<<<<< HEAD
     @forms = Form.all.includes(:submissions)
     @form_counts = Form.joins(:submissions)
       .group("forms.id")
@@ -21,9 +20,6 @@ class SubmissionsController < ApplicationController
     else
       @submissions = base_query.order(created_at: :desc)
     end
-=======
-    @submissions = Submission.includes(:form, :device).order(created_at: :desc)
->>>>>>> 6fe14cbda0429cfc345fc69a1d9e822d7debefea
 
     respond_to do |format|
       format.html
