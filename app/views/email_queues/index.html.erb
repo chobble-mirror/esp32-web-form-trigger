@@ -1,6 +1,28 @@
 <h1>Email Queue Status</h1>
 
 <section>
+  <h2>Summary</h2>
+  <table>
+    <tr>
+      <th>Total Submissions</th>
+      <td><%= @stats[:total] %></td>
+    </tr>
+    <tr>
+      <th>Pending Emails</th>
+      <td><%= @stats[:pending] %></td>
+    </tr>
+    <tr>
+      <th>Successfully Sent</th>
+      <td><%= @stats[:sent] %></td>
+    </tr>
+    <tr>
+      <th>Failed</th>
+      <td><%= @stats[:failed] %></td>
+    </tr>
+  </table>
+</section>
+
+<section>
   <h2>Pending Emails (<%= @pending_jobs.count %>)</h2>
   <% if @pending_jobs.any? %>
     <table>

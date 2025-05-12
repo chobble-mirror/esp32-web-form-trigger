@@ -41,5 +41,8 @@ module PatLogger
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    
+    # Fix deprecation warning about to_time
+    config.active_support.to_time_preserves_timezone = :zone
   end
 end

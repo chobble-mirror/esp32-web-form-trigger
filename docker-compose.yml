@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=production
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - RAILS_LOG_TO_STDOUT=true
+      - JOB_CONCURRENCY=2
+      # Add SMTP settings from .env
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_DOMAIN=${SMTP_DOMAIN}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_AUTH=${SMTP_AUTH}
+      - SMTP_STARTTLS=${SMTP_STARTTLS}
+      - DEFAULT_EMAIL_FROM=${DEFAULT_EMAIL_FROM}
+      - APP_HOST=${APP_HOST}
+      - APP_PORT=${APP_PORT}
+    volumes:
+      - sqlite_data:/rails/db
+      - storage_data:/rails/storage
+    restart: unless-stopped
+    # You could also split the processes and run separately:
+    # command: ./bin/rails server
+  
+  # If you prefer to run the job worker in a separate container:
+  # jobs:
+  #   build: .
+  #   command: ./bin/jobs start
+  #   environment:
+  #     - RAILS_ENV=production
+  #     - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+  #     - RAILS_LOG_TO_STDOUT=true
+  #     - JOB_CONCURRENCY=2
+  #   volumes:
+  #     - sqlite_data:/rails/db
+  #     - storage_data:/rails/storage
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - web
+
+volumes:
+  sqlite_data:
+  storage_data:

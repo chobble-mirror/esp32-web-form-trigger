@@ -1,0 +1,35 @@
+#!/bin/bash -e
+
+# Enable jemalloc for reduced memory usage and latency.
+if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
+  export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
+fi
+
+# If running the rails server then create or migrate existing database
+if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  ./bin/rails db:prepare
+  
+  # Also prepare the queue schema
+  ./bin/rails db:migrate
+fi
+
+# Start the SolidQueue worker process in the background
+if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  echo "Starting SolidQueue worker..."
+  ./bin/jobs start &
+  JOBS_PID=$!
+  
+  # Trap SIGTERM and SIGINT to ensure clean shutdown of both processes
+  trap 'kill -TERM $JOBS_PID; wait $JOBS_PID; exit 0' TERM INT
+fi
+
+# Execute the main command
+exec "${@}" &
+MAIN_PID=$!
+
+# Wait for main process to complete, then kill the jobs process if still running
+wait $MAIN_PID
+if [ -n "${JOBS_PID+x}" ]; then
+  kill -TERM $JOBS_PID 2>/dev/null || true
+  wait $JOBS_PID
+fi

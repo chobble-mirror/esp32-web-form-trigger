@@ -141,3 +141,10 @@ textarea {
   border-radius: 5px;
   margin-bottom: 2rem;
 }
+
+main table form {
+  padding: 0;
+  border: 0;
+  width: min-content;
+  min-width: min-content;
+}

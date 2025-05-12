@@ -57,8 +57,8 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Entrypoint prepares the database and runs the job worker alongside the server.
+ENTRYPOINT ["/rails/bin/docker-entrypoint-with-jobs"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000

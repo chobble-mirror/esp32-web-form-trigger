@@ -1,10 +1,13 @@
 # Configure Action Mailer settings for the application
 
-# Set up email delivery method - use :smtp in production, :test in development/test
-Rails.application.config.action_mailer.delivery_method = Rails.env.production? ? :smtp : :test
+# Always raise errors in development to debug mailer issues
+Rails.application.config.action_mailer.raise_delivery_errors = true
 
-# Configure SMTP settings if in production
-if Rails.env.production?
+# Set up email delivery method - use :smtp in production/development, :test in test
+Rails.application.config.action_mailer.delivery_method = Rails.env.test? ? :test : :smtp
+
+# Configure SMTP settings for all non-test environments
+unless Rails.env.test?
   Rails.application.config.action_mailer.smtp_settings = {
     address: ENV.fetch("SMTP_SERVER", "smtp.example.com"),
     port: ENV.fetch("SMTP_PORT", 587).to_i,
@@ -29,3 +32,12 @@ Rails.application.config.action_mailer.default_options = {
 
 # Set up Active Job as the queuing backend for Action Mailer
 Rails.application.config.action_mailer.queue_adapter = :solid_queue
+
+# Development-specific overrides
+if Rails.env.development?
+  # Print emails to the console in development if no SMTP server is configured
+  unless ENV["SMTP_SERVER"].present? && ENV["SMTP_USERNAME"].present? && ENV["SMTP_PASSWORD"].present?
+    Rails.application.config.action_mailer.delivery_method = :letter_opener
+    Rails.logger.info "Email delivery set to letter_opener since SMTP credentials are not fully configured"
+  end
+end

@@ -73,3 +73,65 @@ Public-facing form URLs follow this pattern:
 - Uses semantic HTML with MVB.css styling
 - Avoids custom CSS classes
 - All admin interfaces follow consistent patterns
+
+## Email Configuration
+
+The application uses ActionMailer with SolidQueue background processing for email deliveries.
+
+### Configuration via Environment Variables
+
+Configure email settings in `.env` using these variables:
+
+```
+# SMTP Email settings
+SMTP_SERVER=smtp.example.com      # SMTP server hostname
+SMTP_PORT=587                     # SMTP port (usually 587 for TLS)
+SMTP_DOMAIN=example.com           # Domain used in HELO
+SMTP_USERNAME=user@example.com    # SMTP login username
+SMTP_PASSWORD=your_password       # SMTP login password
+SMTP_AUTH=plain                   # Authentication type (plain, login, cram_md5)
+SMTP_STARTTLS=true                # Enable STARTTLS (true/false)
+DEFAULT_EMAIL_FROM=noreply@example.com  # Default sender address
+```
+
+### Email Queue Monitoring
+
+Administrators can monitor the email queue status at `/email_queues`. This page shows:
+
+- Queue summary statistics
+- Pending email jobs
+- Failed submissions with retry options
+- Failed jobs with error details
+- Recently completed emails
+
+### Background Processing
+
+Email delivery happens asynchronously using SolidQueue:
+
+1. Start the worker with: `bin/jobs start`
+2. Monitor workers with: `bin/jobs stats`
+3. Run in production: Set `JOB_CONCURRENCY` env var (default: 1)
+
+### Docker Deployment
+
+The application includes Docker configuration that automatically runs both the web server and the job worker:
+
+```bash
+# Build and run using Docker
+docker build -t esp32-form-app .
+docker run -d -p 3000:3000 \
+  -e RAILS_MASTER_KEY=your_master_key \
+  -e SMTP_SERVER=smtp.example.com \
+  -e SMTP_USERNAME=user@example.com \
+  -e SMTP_PASSWORD=password \
+  esp32-form-app
+
+# Or use Docker Compose
+docker-compose up -d
+```
+
+The Docker setup:
+- Runs Rails server and SolidQueue worker in the same container
+- Automatically migrates the database on startup
+- Ensures clean shutdown of both processes
+- Configures email delivery via environment variables

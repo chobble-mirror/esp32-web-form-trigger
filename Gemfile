@@ -31,6 +31,11 @@ group :development, :test do
   gem "standard", require: false
 end
 
+group :development do
+  # Open emails in browser instead of sending in development mode
+  gem "letter_opener"
+end
+
 # PDF generation
 gem "prawn"
 gem "prawn-table"
