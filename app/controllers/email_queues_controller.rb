@@ -2,28 +2,19 @@ class EmailQueuesController < ApplicationController
   before_action :require_admin
 
   def index
-    # Get jobs related to emails
-    @pending_jobs = SolidQueue::Job.where(class_name: "ActionMailer::MailDeliveryJob")
-                                   .where(finished_at: nil)
-                                   .order(created_at: :desc)
-    
-    @completed_jobs = SolidQueue::Job.where(class_name: "ActionMailer::MailDeliveryJob")
-                                     .where.not(finished_at: nil)
-                                     .order(finished_at: :desc)
-                                     .limit(20)
-    
-    # Find jobs with errors
-    @failed_jobs = SolidQueue::FailedExecution.includes(:job)
-                                              .joins(:job)
-                                              .where(solid_queue_jobs: {class_name: "ActionMailer::MailDeliveryJob"})
-                                              .order(created_at: :desc)
-                                              .limit(20)
-    
-    # Get submissions with failed email status
+    # Since we don't have SolidQueue tables yet, let's focus on submission email statuses
+    @pending_submissions = Submission.where(email_status: "pending")
+      .order(created_at: :desc)
+      .limit(50)
+
+    @sent_submissions = Submission.where(email_status: "sent")
+      .order(emailed_at: :desc)
+      .limit(50)
+
     @failed_submissions = Submission.where(email_status: "failed")
-                                    .order(created_at: :desc)
-                                    .limit(20)
-    
+      .order(created_at: :desc)
+      .limit(50)
+
     # Summary stats
     @stats = {
       total: Submission.count,
