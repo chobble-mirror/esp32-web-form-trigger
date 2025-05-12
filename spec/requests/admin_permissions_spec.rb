@@ -85,7 +85,7 @@ RSpec.describe "Admin Permissions", type: :request do
       end
 
       it "cannot modify their own admin status" do
-        patch user_path(@user), params: {user: {admin: true}}
+        post toggle_admin_user_path(@user)
         @user.reload
         expect(@user.admin).to be false
       end
@@ -139,7 +139,7 @@ RSpec.describe "Admin Permissions", type: :request do
           admin: false
         )
 
-        patch user_path(user), params: {user: {admin: true}}
+        post toggle_admin_user_path(user)
         user.reload
         expect(user.admin).to be true
       end

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       get "change_password"
       patch "update_password"
       post "impersonate"
+      post "toggle_admin"
     end
   end
 

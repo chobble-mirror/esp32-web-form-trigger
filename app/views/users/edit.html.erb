@@ -18,12 +18,16 @@
   <%= form.label :email %>
   <%= form.email_field :email %>
 
-  <% if current_user.admin? %>
-    <div>
-      <%= form.label :admin, "Admin User" %>
-      <%= form.radio_button :admin, true, disabled: (@user == current_user), checked: @user.admin? %> Yes
-      <%= form.radio_button :admin, false, disabled: (@user == current_user), checked: !@user.admin? %> No
-    </div>
+  <% if current_user.admin? && @user != current_user %>
+    <article>
+      <% if @user.admin? %>
+        <%= button_to "Remove Admin Status", toggle_admin_user_path(@user), method: :post, 
+            data: { confirm: "Are you sure you want to remove admin status from #{@user.email}?" } %>
+      <% else %>
+        <%= button_to "Make User Admin", toggle_admin_user_path(@user), method: :post, 
+            data: { confirm: "Are you sure you want to give admin status to #{@user.email}?" } %>
+      <% end %>
+    </article>
   <% end %>
 
   <%= form.label :password, "New Password (leave blank if no change)" %>

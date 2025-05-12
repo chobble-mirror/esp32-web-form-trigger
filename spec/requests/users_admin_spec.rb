@@ -38,14 +38,16 @@ RSpec.describe "Admin User Management", type: :request do
     end
 
     it "can change admin status of other users" do
-      patch user_path(@regular_user), params: {user: {admin: true}}
+      post toggle_admin_user_path(@regular_user)
       expect(response).to redirect_to(users_path)
       expect(@regular_user.reload.admin).to be_truthy
     end
 
     it "cannot change own admin status" do
       original_admin_status = @admin.admin
-      patch user_path(@admin), params: {user: {admin: false}}
+      post toggle_admin_user_path(@admin)
+      expect(response).to redirect_to(users_path)
+      expect(flash[:danger]).to eq("You cannot change your own admin status")
       expect(@admin.reload.admin).to eq(original_admin_status)
     end
   end

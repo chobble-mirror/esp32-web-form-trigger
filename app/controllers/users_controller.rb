@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   skip_before_action :require_login, only: [:new, :create]
   before_action :require_not_logged_in, only: [:new, :create]
-  before_action :require_admin, only: [:index, :edit, :update, :destroy, :impersonate]
-  before_action :set_user, only: [:edit, :update, :destroy, :change_password, :update_password, :impersonate]
+  before_action :require_admin, only: [:index, :edit, :update, :destroy, :impersonate, :toggle_admin]
+  before_action :set_user, only: [:edit, :update, :destroy, :change_password, :update_password, :impersonate, :toggle_admin]
   before_action :require_correct_user, only: [:change_password, :update_password]
   before_action :restrict_regular_user_update, only: [:update]
 
@@ -86,6 +86,19 @@ class UsersController < ApplicationController
     redirect_to root_path
   end
 
+  def toggle_admin
+    # Prevent admins from removing their own admin status
+    if current_user == @user
+      flash[:danger] = "You cannot change your own admin status"
+      redirect_to users_path
+      return
+    end
+
+    @user.update(admin: !@user.admin?)
+    flash[:success] = @user.admin? ? "#{@user.email} is now an admin" : "#{@user.email} is no longer an admin"
+    redirect_to users_path
+  end
+
   private
 
   def set_user
@@ -94,12 +107,11 @@ class UsersController < ApplicationController
 
   def user_params
     if current_user&.admin?
-      # Admins can set email, admin status, and password
+      # Admins can set email and password (but not admin status through mass assignment)
       params.require(:user).permit(
         :email,
         :password,
-        :password_confirmation,
-        :admin
+        :password_confirmation
       )
     elsif action_name == "create"
       # For new user registration, allow email and password
