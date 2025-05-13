@@ -3,15 +3,15 @@ import time
 import urequests
 
 from wifi import wifi_init
-from relay_control import activate_relay
+from opto_control import activate_opto
 from post_request import post_request
 from config import (
-    RELAY_PIN,
+    OPTO_PIN,
     BUTTON_PIN,
     POST_INTERVAL,
 )
 
-relay = machine.Pin(RELAY_PIN, machine.Pin.OUT)
+opto = machine.Pin(OPTO_PIN, machine.Pin.OUT)
 button = machine.Pin(BUTTON_PIN, machine.Pin.IN, machine.Pin.PULL_UP)
 
 def button_isr(pin):
@@ -28,15 +28,15 @@ last_post_time = 0
 while True:
     now = time.ticks_ms()
     if time.ticks_diff(now, last_post_time) >= POST_INTERVAL:
-        response_code = post_request()
+        response_code, response_body = post_request()
         print("Server responded:", response_code)
         if response_code == 200:
-            activate_relay(relay)
+            activate_opto(opto)
         last_post_time = now
 
     if should_trigger:
         print("Button pressed")
-        activate_relay(relay)
+        activate_opto(opto)
         while button.value() == 0:
             time.sleep(0.02)
         should_trigger = False

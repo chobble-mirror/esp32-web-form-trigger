@@ -1,51 +1,76 @@
 import network
 import socket
 import time
-from config import WIFI_PASSWORDS
+from config import WIFI_SSID, WIFI_PASSWORD
 
 def get_available_ssids(wlan):
     scan_results = wlan.scan()
     available = []
     for entry in scan_results:
         try:
-            ssid = entry[0].decode()
-        except Exception:
+            ssid = entry[0].decode('utf-8')
+            # Print full scan entry for debugging
+            print(f"Found network: {ssid}, Signal: {entry[3]}dBm")
+        except Exception as e:
+            print(f"Error decoding SSID: {e}")
             ssid = str(entry[0])
         available.append(ssid)
     print("Available SSIDs:", available)
     return available
 
 def wifi_init():
+    # Start with a clean slate - reset WiFi completely
     wlan = network.WLAN(network.STA_IF)
+    wlan.active(False)
+    time.sleep(1)
     wlan.active(True)
-    found_ssids = get_available_ssids(wlan)
-    for ssid, password in WIFI_PASSWORDS:
-        if ssid in found_ssids:
-            print(f"SSID '{ssid}' found, trying to connect...")
-            try:
-                wlan.disconnect()
-                time.sleep(0.1)
-                wlan.connect(ssid, password)
-                for _ in range(20):
-                    if wlan.isconnected() and wlan.config('essid') == ssid:
-                        print(f"Connected to '{ssid}'")
-                        print("Network config:", wlan.ifconfig())
-                        return
-                    time.sleep(0.5)
-            except OSError as e:
-                print(f"Exception during connect to '{ssid}': {e}")
-            except Exception as e:
-                print(f"Other exception: {e}")
-            print(f"Failed to connect to '{ssid}' (wrong password or network issue).")
-        else:
-            print(f"SSID '{ssid}' not found in current scan, skipping.")
+    time.sleep(1)
+
+    # Try connecting directly with hardcoded credentials
+    print(f"Trying to connect to '{WIFI_SSID}'...")
+    try:
+        # Make sure we're disconnected first
+        wlan.disconnect()
+        time.sleep(1)
+
+        # Direct connection with hardcoded strings
+        print(f"Connecting to: '{WIFI_SSID}' with password: '{WIFI_PASSWORD}'")
+        wlan.connect(WIFI_SSID, WIFI_PASSWORD)
+
+        # Check connection status
+        for i in range(20):
+            print(f"Waiting for connection... {i+1}/20")
+            if wlan.isconnected():
+                connected_ssid = wlan.config('essid')
+                print(f"Connected to '{connected_ssid}'")
+                print("Network config:", wlan.ifconfig())
+                return
+            time.sleep(0.5)
+
+        print(f"Failed to connect to '{WIFI_SSID}' - will try AP mode.")
+    except OSError as e:
+        print(f"Exception during connect: {e}")
+    except Exception as e:
+        print(f"Other exception: {e}")
+
+    # If we get here, connection failed
     while True:
+        # Get fresh scan of available networks for the AP mode
         ap = start_ap_mode()
         wlan = network.WLAN(network.STA_IF)
+        wlan.active(False)
+        time.sleep(1)
         wlan.active(True)
-        sel_ssid, sel_password = web_server(found_ssids)
+        time.sleep(1)
+
+        # Get a fresh list of available SSIDs
+        available_networks = get_available_ssids(wlan)
+        sel_ssid, sel_password = web_server(available_networks)
         ap.active(False)
         print("Attempting to connect to:", sel_ssid)
+        # Try a clean connect after completely resetting wifi state
+        wlan.disconnect()
+        time.sleep(1)
         wlan.connect(sel_ssid, sel_password)
         for _ in range(20):  # Try for ~10 seconds
             if wlan.isconnected() and wlan.config('essid') == sel_ssid:
