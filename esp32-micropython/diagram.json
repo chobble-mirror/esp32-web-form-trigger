@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": -153.6,
+      "left": -167.96,
+      "attrs": { "env": "micropython-20231227-v1.22.0" }
+    },
+    { "type": "wokwi-relay-module", "id": "relay1", "top": 57.8, "left": -38.4, "attrs": {} },
+    { "type": "wokwi-led", "id": "led1", "top": -70.8, "left": 71, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -24.85,
+      "left": -9.6,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": -166.6,
+      "left": -19.2,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    { "type": "wokwi-optoisolator", "id": "opto1", "top": -50, "left": -40, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "relay1:IN", "esp:18", "green", [ "h-19.2", "v-153.8" ] ],
+    [ "relay1:VCC", "esp:5V", "red", [ "h0" ] ],
+    [ "esp:GND.2", "relay1:GND", "black", [ "h19.2", "v221.2" ] ],
+    [ "led1:A", "relay1:COM", "green", [ "v0" ] ],
+    [ "led1:C", "r1:2", "green", [ "v0" ] ],
+    [ "r1:1", "esp:GND.3", "green", [ "v0" ] ],
+    [ "relay1:NO", "esp:5V", "green", [ "v27", "h-258", "v-76.8" ] ],
+    [ "btn1:1.l", "esp:GND.1", "green", [ "v-38.4", "h-201.6", "v182.4" ] ],
+    [ "btn1:2.r", "esp:15", "green", [ "h96.2", "v153.8" ] ]
+  ],
+  "dependencies": {}
+}

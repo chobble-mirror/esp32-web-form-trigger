@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  resources :devices, except: [:destroy] do
+  resources :devices, except: [:destroy, :show] do
     member do
       post :archive
       post :unarchive
     end
   end
-  resources :forms
+  resources :forms, except: [:show]
   resources :submissions, only: [:index, :show]
 
   # Public form routes
@@ -16,8 +16,8 @@ Rails.application.routes.draw do
   # API endpoints
   namespace :api do
     namespace :v1 do
-      get "credits/check/:device_id", to: "credits#check"
-      post "credits/claim/:device_id", to: "credits#claim"
+      get "credits/check", to: "credits#check"
+      post "credits/claim", to: "credits#claim"
     end
   end
 

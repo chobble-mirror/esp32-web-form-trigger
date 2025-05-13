@@ -24,7 +24,7 @@ class DevicesController < ApplicationController
     @device = Device.new(device_params)
 
     if @device.save
-      redirect_to @device, notice: "Device was successfully created."
+      redirect_to edit_device_path(@device), notice: "Device was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class DevicesController < ApplicationController
 
   def update
     if @device.update(device_params)
-      redirect_to @device, notice: "Device was successfully updated."
+      redirect_to edit_device_path(@device), notice: "Device was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
