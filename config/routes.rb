@@ -6,7 +6,11 @@ Rails.application.routes.draw do
     end
   end
   resources :forms, except: [:show]
-  resources :submissions, only: [:index, :show]
+  resources :submissions, only: [:index, :show] do
+    member do
+      post :reset_credit
+    end
+  end
 
   # Public form routes
   get "form/:form_id/:device_id", to: "public_forms#show", as: "public_form"

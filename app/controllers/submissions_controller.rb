@@ -3,7 +3,7 @@ require "csv"
 class SubmissionsController < ApplicationController
   before_action :require_login
   before_action :require_admin
-  before_action :set_submission, only: [:show]
+  before_action :set_submission, only: [:show, :reset_credit]
 
   def index
     @forms = Form.all.includes(:submissions)
@@ -39,6 +39,15 @@ class SubmissionsController < ApplicationController
 
       # Render the email preview if requested
       render template: "submission_mailer/new_submission", layout: "mailer"
+    end
+  end
+
+  def reset_credit
+    if @submission.credit_claimed
+      @submission.reset_credit!
+      redirect_to submission_path(@submission), notice: "Credit has been reset and is now available"
+    else
+      redirect_to submission_path(@submission), alert: "Credit is already available"
     end
   end
 

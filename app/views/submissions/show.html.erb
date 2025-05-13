@@ -21,7 +21,12 @@
     <dd><%= link_to @submission.device.name, edit_device_path(@submission.device) %></dd>
 
     <dt>Credit Status</dt>
-    <dd><%= @submission.credit_claimed ? "Claimed" : "Available" %></dd>
+    <dd>
+      <%= @submission.credit_claimed ? "Claimed" : "Available" %>
+      <% if @submission.credit_claimed %>
+        <%= button_to "Reset Credit", reset_credit_submission_path(@submission), method: :post, data: { turbo_confirm: "Reset this credit to Available?" } %>
+      <% end %>
+    </dd>
 
     <dt>Email Status</dt>
     <dd>

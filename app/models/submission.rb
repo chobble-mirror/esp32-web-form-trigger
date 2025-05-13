@@ -15,6 +15,10 @@ class Submission < ApplicationRecord
     update!(credit_claimed: true)
   end
 
+  def reset_credit!
+    update!(credit_claimed: false)
+  end
+
   def mark_as_emailed!
     update!(email_status: "sent", emailed_at: Time.current)
   end
