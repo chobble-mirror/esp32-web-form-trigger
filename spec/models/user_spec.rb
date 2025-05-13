@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
 
       it "requires a unique email" do
         User.create!(valid_attributes.merge(email: "duplicate@example.com"))
-        
+
         duplicate_user = User.new(valid_attributes.merge(email: "duplicate@example.com"))
         expect(duplicate_user).not_to be_valid
         expect(duplicate_user.errors[:email]).to include("has already been taken")
@@ -38,13 +38,13 @@ RSpec.describe User, type: :model do
 
       it "is case-insensitive for email uniqueness" do
         User.create!(valid_attributes.merge(email: "CASE@example.com"))
-        
+
         # With our updated model, this should now be invalid (case-insensitive)
         duplicate_user = User.new(valid_attributes.merge(email: "case@example.com"))
         expect(duplicate_user).not_to be_valid
         expect(duplicate_user.errors[:email]).to include("has already been taken")
       end
-      
+
       it "downcases email before saving" do
         user = User.create!(valid_attributes.merge(email: "UPPERCASE@example.com"))
         expect(user.email).to eq("uppercase@example.com")
@@ -71,7 +71,7 @@ RSpec.describe User, type: :model do
       it "doesn't require password on update if not changing password_digest" do
         user = User.create!(valid_attributes)
         user.email = "updated@example.com"
-        
+
         # Skip password validation when not changing password
         expect(user).to be_valid
         expect(user.save).to be true
@@ -90,12 +90,12 @@ RSpec.describe User, type: :model do
   describe "admin functionality" do
     it "allows setting admin status manually" do
       admin_user = User.create!(valid_attributes.merge(
-        email: "admin@example.com", 
+        email: "admin@example.com",
         admin: true
       ))
-      
+
       regular_user = User.create!(valid_attributes.merge(
-        email: "regular@example.com", 
+        email: "regular@example.com",
         admin: false
       ))
 
@@ -128,29 +128,29 @@ RSpec.describe User, type: :model do
     it "allows setting last_active_at" do
       user = User.create!(valid_attributes)
       timestamp = Time.current
-      
+
       user.update(last_active_at: timestamp)
       expect(user.last_active_at).to be_within(1.second).of(timestamp)
     end
-    
+
     it "allows querying users by activity status" do
       active_user = User.create!(valid_attributes.merge(
         email: "active@example.com",
         last_active_at: 1.hour.ago
       ))
-      
+
       inactive_user = User.create!(valid_attributes.merge(
         email: "inactive@example.com",
         last_active_at: 31.days.ago
       ))
-      
+
       never_active_user = User.create!(valid_attributes.merge(
         email: "never@example.com",
         last_active_at: nil
       ))
-      
+
       # Example of how you might query active users (within last 30 days)
-      active_users = User.where('last_active_at > ?', 30.days.ago)
+      active_users = User.where("last_active_at > ?", 30.days.ago)
       expect(active_users).to include(active_user)
       expect(active_users).not_to include(inactive_user)
       expect(active_users).not_to include(never_active_user)
@@ -160,20 +160,20 @@ RSpec.describe User, type: :model do
   describe "authentication" do
     it "ensures has_secure_password is properly configured" do
       user = User.create!(valid_attributes)
-      
+
       # Test authentication works
       expect(user.authenticate("password")).to eq(user)
       expect(user.authenticate("wrong")).to be false
-      
+
       # Test password digest storage
       expect(user.password_digest).to be_present
       expect(user.password_digest).not_to eq("password")
     end
-    
+
     it "updates password_digest when password changes" do
       user = User.create!(valid_attributes)
       original_digest = user.password_digest
-      
+
       user.update(password: "newpassword", password_confirmation: "newpassword")
       expect(user.password_digest).not_to eq(original_digest)
     end
@@ -182,16 +182,16 @@ RSpec.describe User, type: :model do
   describe "associations and dependencies" do
     # If User model has associations, test them here
     # For example, if users have forms, devices, etc.
-    
+
     it "can be queried for the first admin user" do
       User.destroy_all
-      
+
       admin = User.create!(valid_attributes.merge(admin: true))
-      regular = User.create!(valid_attributes.merge(
-        email: "regular@example.com", 
+      User.create!(valid_attributes.merge(
+        email: "regular@example.com",
         admin: false
       ))
-      
+
       expect(User.where(admin: true).first).to eq(admin)
     end
   end
