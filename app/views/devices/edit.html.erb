@@ -7,45 +7,54 @@
 
 <%= render 'form', device: @device %>
 
-<section>
-  <h3>Device Status</h3>
-  <% if @device.archived %>
-    <p>This device is archived and won't appear in the default device list.</p>
-    <%= button_to unarchive_device_path(@device), method: :post do %>
-      Restore Device
-    <% end %>
-  <% else %>
-    <p>Archive this device if it's no longer in use. Archived devices can be restored later.</p>
-    <%= button_to archive_device_path(@device), method: :post do %>
-      Archive Device
-    <% end %>
-  <% end %>
-</section>
+<hr>
 
-<section>
+<div class="center">
+  <h2>Device Status</h2>
+
+  <div class="slim-forms">
+    <% if @device.archived %>
+      <p>
+        This device is archived and won't appear in the default device list.
+      </p>
+      <%= button_to unarchive_device_path(@device), method: :post do %>
+        Restore Device
+      <% end %>
+    <% else %>
+      <p>
+        Archive this device if it's no longer in use. Archived devices can be
+        restored later.
+      </p>
+      <%= button_to archive_device_path(@device), method: :post do %>
+        Archive Device
+      <% end %>
+    <% end %>
+  </div>
+
+  <hr>
+
   <h2>Form Links</h2>
   <p>Here are public links to this device's forms:</p>
-  
+
   <% if Form.any? %>
-    <ul>
-      <% Form.all.each do |form| %>
-        <li>
-          <%= link_to form.name, public_form_path(form.id, @device.id), target: "_blank" %>
-          <small><%= form.target_email_address %></small>
-        </li>
-      <% end %>
-    </ul>
+    <% Form.all.each do |form| %>
+      <p>
+        <%= link_to form.name, public_form_path(form.id, @device.id), target: "_blank" %>
+        <small><%= form.target_email_address %></small>
+      </p>
+    <% end %>
   <% else %>
     <p>No forms available. <%= link_to "Create a form", new_form_path %> first.</p>
   <% end %>
-</section>
 
-<section>
-  <h3>Latest Submissions</h3>
+  <hr>
+
+  <h2>Latest Submissions</h2>
+
   <% submissions = @device.submissions.order(created_at: :desc).limit(5) %>
   <%= render 'submissions/list', submissions: submissions %>
-  
+
   <% if submissions.any? %>
     <p><%= link_to "View all submissions", submissions_path %></p>
   <% end %>
-</section>
+</div>

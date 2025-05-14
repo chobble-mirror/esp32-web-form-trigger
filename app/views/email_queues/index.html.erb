@@ -1,30 +1,28 @@
-<h1>Email Queue Status</h1>
+<header><h1>Email Queue Status</h1></header>
 
-<section>
-  <article>
-    <h2>Summary</h2>
-    <table class="email-queue-table">
-      <tr>
-        <th>Total Submissions</th>
-        <td><%= @stats[:total] %></td>
-      </tr>
-      <tr>
-        <th>Pending Emails</th>
-        <td><%= @stats[:pending] %></td>
-      </tr>
-      <tr>
-        <th>Successfully Sent</th>
-        <td><%= @stats[:sent] %></td>
-      </tr>
-      <tr>
-        <th>Failed</th>
-        <td><%= @stats[:failed] %></td>
-      </tr>
-    </table>
-  </article>
-</section>
+<div class="center">
+  <h2>Summary</h2>
+  <table class="email-queue-table">
+    <tr>
+      <th>Total Submissions</th>
+      <td><%= @stats[:total] %></td>
+    </tr>
+    <tr>
+      <th>Pending Emails</th>
+      <td><%= @stats[:pending] %></td>
+    </tr>
+    <tr>
+      <th>Successfully Sent</th>
+      <td><%= @stats[:sent] %></td>
+    </tr>
+    <tr>
+      <th>Failed</th>
+      <td><%= @stats[:failed] %></td>
+    </tr>
+  </table>
 
-<section>
+  <hr>
+
   <h2>Pending Emails</h2>
   <% if @pending_submissions.any? %>
     <table class="email-queue-table">
@@ -56,9 +54,9 @@
   <% else %>
     <p>No pending emails in the queue.</p>
   <% end %>
-</section>
 
-<section>
+  <hr>
+
   <h2>Failed Submissions</h2>
   <% if @failed_submissions.any? %>
     <table class="email-queue-table">
@@ -104,9 +102,9 @@
   <% else %>
     <p>No failed email submissions.</p>
   <% end %>
-</section>
 
-<section>
+  <hr>
+
   <h2>Recent Completed Emails</h2>
   <% if @sent_submissions.any? %>
     <table class="email-queue-table">
@@ -141,4 +139,4 @@
   <% else %>
     <p>No completed email submissions.</p>
   <% end %>
-</section>
+</div>

@@ -33,6 +33,7 @@ This application allows you to:
 ### Submissions
 
 Each submission records:
+
 - Associated form and device
 - User details (name, email, phone, address, postcode) based on enabled fields
 - Credit status (claimed/unclaimed)
@@ -42,12 +43,13 @@ Each submission records:
 
 For devices to check and claim credits:
 
-- `GET /api/v1/credits/check/:device_id` - Check available credits
-- `POST /api/v1/credits/claim/:device_id` - Claim a credit
+- `GET /api/v1/credits/check` - Check available credits
+- `POST /api/v1/credits/claim` - Claim a credit
 
 ## Public Form URLs
 
 Public-facing form URLs follow this pattern:
+
 ```
 /form/:form_id/:device_id
 ```
@@ -131,6 +133,7 @@ docker-compose up -d
 ```
 
 The Docker setup:
+
 - Runs Rails server and SolidQueue worker in the same container
 - Automatically migrates the database on startup
 - Ensures clean shutdown of both processes

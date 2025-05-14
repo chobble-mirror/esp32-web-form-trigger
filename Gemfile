@@ -46,6 +46,7 @@ gem "bcrypt"
 gem "redcarpet"
 
 gem "importmap-rails", "~> 2.1"
+gem "turbo-rails", "~> 2.0"
 
 # Image processing
 gem "image_processing", "~> 1.12"
