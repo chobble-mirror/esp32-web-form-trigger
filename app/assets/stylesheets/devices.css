@@ -1,0 +1,164 @@
+/* Public device layout */
+.public-device {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Device stats page */
+.device-stats {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.device-stats h1 {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.stat-item strong {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.stat-item small {
+  display: inline-block;
+  font-size: 0.85em;
+  color: #666;
+  margin-left: 5px;
+}
+
+.stat-item ul {
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Credit button styling */
+.credit-button {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.credit-button:hover {
+  background-color: #ff7043;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.credit-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.credit-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.7s;
+}
+
+.credit-button:hover::before {
+  left: 100%;
+}
+
+.credit-button.animated {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(255, 87, 34, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.button-disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  animation: none;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-disabled:hover {
+  background-color: #ccc;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Click animation */
+@keyframes buttonClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (min-width: 768px) {
+  .stats-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.button_to {
+  border: none;
+  box-shadow: none;
+}

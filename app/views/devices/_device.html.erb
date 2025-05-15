@@ -1,0 +1,64 @@
+<%= turbo_frame_tag device do %>
+  <div class="device-stats" id="device-<%= device.id %>">
+    <h1><%= device.name %></h1>
+    
+    <div class="stats-container">
+      <div class="stat-item">
+        <strong>Device ID:</strong> <%= device.id %>
+      </div>
+      
+      <div class="stat-item">
+        <strong>Device Location:</strong> <%= device.location.presence || "Not specified" %>
+      </div>
+      
+      <div class="stat-item">
+        <strong>Total Submissions:</strong> <%= @total_submissions %>
+      </div>
+      
+      <div class="stat-item">
+        <strong>Last Submission:</strong>
+        <% if @last_submission&.created_at %>
+          <%= @last_submission.created_at.strftime("%B %d, %Y at %H:%M") %>
+          <small>(<%= time_ago_in_words(@last_submission.created_at) %> ago)</small>
+        <% else %>
+          Never
+        <% end %>
+      </div>
+
+      <div class="stat-item">
+        <strong>Last Heard From:</strong>
+        <% if device.last_heard_from %>
+          <%= device.last_heard_from.strftime("%B %d, %Y at %H:%M") %>
+          <small>(<%= time_ago_in_words(device.last_heard_from) %> ago)</small>
+        <% else %>
+          Never
+        <% end %>
+      </div>
+
+      <div class="stat-item">
+        <strong>Free Credit Available:</strong> <%= device.free_credit ? "Yes" : "No" %>
+      </div>
+      
+      <div class="stat-item">
+        <strong>Current Forms:</strong>
+        <% if @forms.any? %>
+          <ul>
+            <% @forms.each do |form| %>
+              <li><%= form.name %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>No forms used yet</p>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="actions">
+      <%= button_to "Reset Free Credit", reset_device_credit_path(device),
+          class: "credit-button #{device.free_credit ? 'button-disabled' : 'animated'}",
+          disabled: device.free_credit,
+          form: { data: { turbo: true, controller: "animation" } },
+          data: { action: "click->animation#pulse" } %>
+    </div>
+  </div>
+<% end %>

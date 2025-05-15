@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @device.present? ? "Device: #{@device.name}" : "ESP32 Web Form Trigger" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "mvp" %>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_importmap_tags %>
+    <%= favicon_link_tag asset_path("favicon.svg") %>
+  </head>
+  <body>
+    <main class="public-device">
+      <% flash.each do |type, message| %>
+        <article>
+          <aside><%= message %></aside>
+        </article>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  </body>
+</html>

@@ -3,6 +3,12 @@
   <% if @device.archived %>
     <p><small>This device is archived</small></p>
   <% end %>
+
+  <div class="public-link">
+    <%= link_to public_device_path(@device), target: "_blank" do %>
+      <strong>Public View</strong>
+    <% end %>
+  </div>
 </header>
 
 <%= render 'form', device: @device %>
@@ -13,6 +19,18 @@
   <h2>Device Status</h2>
 
   <div class="slim-forms">
+    <% if @device.last_heard_from %>
+      <p>
+        <strong>Last API Contact:</strong>
+        <%= @device.last_heard_from.strftime("%B %d, %Y at %H:%M") %>
+        (<%= time_ago_in_words(@device.last_heard_from) %> ago)
+      </p>
+    <% else %>
+      <p>
+        <strong>Last API Contact:</strong> Never
+      </p>
+    <% end %>
+
     <% if @device.archived %>
       <p>
         This device is archived and won't appear in the default device list.

@@ -1,0 +1,11 @@
+<div class="device-page">
+  <%= render 'device', device: @device, total_submissions: @total_submissions, last_submission: @last_submission, forms: @forms %>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener("turbo:load", function() {
+    setInterval(function() {
+      Turbo.visit("<%= public_device_path(@device) %>", { action: "replace" });
+    }, 10000);
+  });
+<% end %>

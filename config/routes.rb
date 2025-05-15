@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   post "form/:form_id/:device_id", to: "public_forms#create"
   get "form/:form_id/:device_id/thanks", to: "public_forms#thanks", as: "form_thanks"
 
+  # Public device route
+  get "devices/:id", to: "devices#show", as: "public_device"
+  post "devices/:id/reset_credit", to: "devices#reset_credit", as: "reset_device_credit"
+
   # API endpoints
   namespace :api do
     namespace :v1 do
