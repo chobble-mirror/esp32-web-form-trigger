@@ -1,7 +1,7 @@
 class DevicesController < ApplicationController
   before_action :set_device, only: [:edit, :update, :archive, :unarchive, :show, :reset_credit]
   before_action :require_admin, except: [:show, :reset_credit]
-  layout 'public_device', only: [:show]
+  layout "public_device", only: [:show]
 
   def index
     @filter = params[:filter] || "active"
@@ -55,9 +55,9 @@ class DevicesController < ApplicationController
   # Public device page showing stats
   def show
     @forms = Form.joins(:submissions)
-                 .where(submissions: { device_id: @device.id })
-                 .distinct
-                 .order(name: :asc)
+      .where(submissions: {device_id: @device.id})
+      .distinct
+      .order(name: :asc)
 
     @total_submissions = @device.submissions.count
     @last_submission = @device.submissions.order(created_at: :desc).first
@@ -69,16 +69,16 @@ class DevicesController < ApplicationController
 
     # Load the same data as in the show action to avoid nil errors
     @forms = Form.joins(:submissions)
-               .where(submissions: { device_id: @device.id })
-               .distinct
-               .order(name: :asc)
+      .where(submissions: {device_id: @device.id})
+      .distinct
+      .order(name: :asc)
 
     @total_submissions = @device.submissions.count
     @last_submission = @device.submissions.order(created_at: :desc).first
 
     respond_to do |format|
       format.html { redirect_to public_device_path(@device), notice: "Free credit reset successfully." }
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@device, partial: "devices/device", locals: { device: @device }) }
+      format.turbo_stream { render turbo_stream: turbo_stream.replace(@device, partial: "devices/device", locals: {device: @device}) }
     end
   end
 
