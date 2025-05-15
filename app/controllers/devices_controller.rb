@@ -76,10 +76,7 @@ class DevicesController < ApplicationController
     @total_submissions = @device.submissions.count
     @last_submission = @device.submissions.order(created_at: :desc).first
 
-    respond_to do |format|
-      format.html { redirect_to public_device_path(@device), notice: "Free credit reset successfully." }
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@device, partial: "devices/device", locals: {device: @device}) }
-    end
+    redirect_to public_device_path(@device), notice: "Free credit reset successfully."
   end
 
   private

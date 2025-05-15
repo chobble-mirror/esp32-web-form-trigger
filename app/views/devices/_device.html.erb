@@ -56,9 +56,7 @@
     <div class="actions">
       <%= button_to "Reset Free Credit", reset_device_credit_path(device),
           class: "credit-button #{device.free_credit ? 'button-disabled' : 'animated'}",
-          disabled: device.free_credit,
-          form: { data: { turbo: true, controller: "animation" } },
-          data: { action: "click->animation#pulse" } %>
+          disabled: device.free_credit %>
     </div>
   </div>
 <% end %>
