@@ -17,7 +17,7 @@
 
   <fieldset>
     <legend>Appearance</legend>
-    
+
     <div>
       <%= f.label :header_image %>
       <%= f.file_field :header_image %>
@@ -46,6 +46,11 @@
     <div>
       <%= f.label :button_text %>
       <%= f.text_field :button_text, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :custom_css, "Custom CSS" %>
+      <%= f.text_area :custom_css, rows: 8, placeholder: "Enter custom CSS here..." %>
     </div>
   </fieldset>
 

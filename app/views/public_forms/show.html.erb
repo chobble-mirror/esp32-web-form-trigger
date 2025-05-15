@@ -9,6 +9,8 @@
     border-color: <%= @form.button_color %>;
     color: <%= @form.button_text_color %>;
   }
+
+  <%= @form.custom_css if @form.custom_css.present? %>
 </style>
 
 <header>

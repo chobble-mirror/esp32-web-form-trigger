@@ -61,7 +61,8 @@ class FormsController < ApplicationController
       :enable_postcode,
       :terms_and_conditions,
       :thank_you_text,
-      :target_email_address
+      :target_email_address,
+      :custom_css
     )
   end
 end
