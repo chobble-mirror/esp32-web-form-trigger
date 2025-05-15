@@ -1,7 +1,7 @@
 import network
 import socket
 import time
-from config import WIFI_SSID, WIFI_PASSWORD
+from config import WIFI_SSID, WIFI_PASSWORD, DEVICE_ID
 
 def get_available_ssids(wlan):
     scan_results = wlan.scan()
@@ -85,8 +85,9 @@ def wifi_init():
 def start_ap_mode():
     ap = network.WLAN(network.AP_IF)
     ap.active(True)
-    ap.config(essid='ESP32_Setup', authmode=network.AUTH_WPA_WPA2_PSK, password="esp32setup")
-    print('AP Mode started, connect to SSID: ESP32_Setup, password: esp32setup')
+    ap_name = f'ESP32-{DEVICE_ID}'
+    ap.config(essid=ap_name, authmode=network.AUTH_OPEN)
+    print(f'AP Mode started, connect to SSID: {ap_name} (no password required)')
     return ap
 
 def serve_html(ssid_list):
