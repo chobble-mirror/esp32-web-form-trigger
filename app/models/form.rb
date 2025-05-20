@@ -1,5 +1,6 @@
 class Form < ApplicationRecord
   has_one_attached :header_image
+  has_one_attached :intro_image
   has_many :submissions, dependent: :destroy
 
   validates :name, presence: true
@@ -17,5 +18,7 @@ class Form < ApplicationRecord
     self.text_color ||= "#333333"
     self.button_color ||= "#4CAF50"
     self.button_text_color ||= "#ffffff"
+    self.start_over_button_text ||= "Start Over"
+    self.intro_image_hover_outline_color ||= "#4CAF50"
   end
 end

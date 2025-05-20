@@ -19,5 +19,11 @@
       <h1>Thank You</h1>
       <p>Your submission has been received. A credit has been added to the arcade machine.</p>
     <% end %>
+
+    <% if @form.start_over_button_text.present? %>
+      <p class="start-over-button">
+        <%= link_to @form.start_over_button_text, public_form_path(@form, @device), class: "button strong", style: "background-color: #{@form.button_color}; border-color: #{@form.button_color}; color: #{@form.button_text_color};" %>
+      </p>
+    <% end %>
   </div>
 </main>

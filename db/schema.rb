@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_15_161755) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_20_142744) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -69,6 +69,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_161755) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.text "custom_css"
+    t.string "start_over_button_text"
+    t.string "intro_image_hover_outline_color"
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|

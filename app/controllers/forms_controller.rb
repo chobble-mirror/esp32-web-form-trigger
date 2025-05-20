@@ -1,7 +1,7 @@
 class FormsController < ApplicationController
   before_action :require_login
   before_action :require_admin
-  before_action :set_form, only: [:edit, :update, :destroy]
+  before_action :set_form, only: [:edit, :update, :destroy, :remove_image]
 
   def index
     @forms = Form.all
@@ -27,7 +27,7 @@ class FormsController < ApplicationController
 
   def update
     if @form.update(form_params)
-      redirect_to forms_path, notice: "Form was successfully updated."
+      redirect_to edit_form_path(@form), notice: "Form was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -36,6 +36,22 @@ class FormsController < ApplicationController
   def destroy
     @form.destroy
     redirect_to forms_path, notice: "Form was successfully deleted."
+  end
+
+  def remove_image
+    image_type = params[:image_type]
+
+    if image_type == "header_image" && @form.header_image.attached?
+      @form.header_image.purge
+      notice = "Header image was successfully removed."
+    elsif image_type == "intro_image" && @form.intro_image.attached?
+      @form.intro_image.purge
+      notice = "Intro image was successfully removed."
+    else
+      notice = "No image was found to remove."
+    end
+
+    redirect_to edit_form_path(@form), notice: notice
   end
 
   private
@@ -48,11 +64,14 @@ class FormsController < ApplicationController
     params.require(:form).permit(
       :name,
       :header_image,
+      :intro_image,
       :background_color,
       :text_color,
       :button_color,
       :button_text_color,
       :button_text,
+      :start_over_button_text,
+      :intro_image_hover_outline_color,
       :header_text,
       :enable_name,
       :enable_email_address,

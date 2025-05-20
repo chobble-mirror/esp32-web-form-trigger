@@ -58,6 +58,10 @@ html {
   }
 }
 
+.strong {
+  font-weight: bold;
+}
+
 /* Layout */
 article aside {
   background: var(--color-secondary-accent);
@@ -311,6 +315,7 @@ a em,
 a i,
 a strong,
 button,
+.button,
 input[type="submit"] {
   border-radius: var(--border-radius);
   display: inline-block;
@@ -321,17 +326,20 @@ input[type="submit"] {
   padding: 1rem 2rem;
 }
 
+.button,
 button,
 input[type="submit"] {
   font-family: var(--font-family);
 }
 
+.button:hover,
 button:hover,
 input[type="submit"]:hover {
   cursor: pointer;
   filter: brightness(var(--hover-brightness));
 }
 
+.button:active,
 button:active,
 input[type="submit"]:active {
   filter: brightness(var(--active-brightness));

@@ -5,7 +5,11 @@ Rails.application.routes.draw do
       post :unarchive
     end
   end
-  resources :forms, except: [:show]
+  resources :forms, except: [:show] do
+    member do
+      patch :remove_image
+    end
+  end
   resources :submissions, only: [:index, :show] do
     member do
       post :reset_credit

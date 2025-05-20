@@ -21,6 +21,46 @@
     <div>
       <%= f.label :header_image %>
       <%= f.file_field :header_image %>
+      <% if form.header_image.attached? %>
+        <div class="current-image">
+          <p>Current image: <%= form.header_image.filename %> (<%= number_to_human_size(form.header_image.byte_size) %>)</p>
+          <div class="thumbnail">
+            <%= image_tag url_for(form.header_image), style: "max-height: 100px; max-width: 300px;" %>
+          </div>
+          <%= link_to "Remove image", "#",
+                      class: "remove-image",
+                      data: {
+                        confirm: "Are you sure you want to remove this header image?",
+                        image_type: "header_image",
+                        form_id: form.id
+                      } %>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :intro_image, "Intro Image (shown before form)" %>
+      <%= f.file_field :intro_image %>
+      <% if form.intro_image.attached? %>
+        <div class="current-image">
+          <p>Current image: <%= form.intro_image.filename %> (<%= number_to_human_size(form.intro_image.byte_size) %>)</p>
+          <div class="thumbnail">
+            <%= image_tag url_for(form.intro_image), style: "max-height: 100px; max-width: 300px;" %>
+          </div>
+          <%= link_to "Remove image", "#",
+                      class: "remove-image",
+                      data: {
+                        confirm: "Are you sure you want to remove this intro image?",
+                        image_type: "intro_image",
+                        form_id: form.id
+                      } %>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :intro_image_hover_outline_color, "Intro Image Hover Outline Color" %>
+      <%= f.color_field :intro_image_hover_outline_color %>
     </div>
 
     <div>
@@ -46,6 +86,11 @@
     <div>
       <%= f.label :button_text %>
       <%= f.text_field :button_text, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :start_over_button_text, "Start Over Button Text" %>
+      <%= f.text_field :start_over_button_text %>
     </div>
 
     <div>

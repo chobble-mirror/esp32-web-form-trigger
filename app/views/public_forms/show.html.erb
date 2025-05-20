@@ -10,18 +10,57 @@
     color: <%= @form.button_text_color %>;
   }
 
+  .intro-image-container {
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
+  }
+
+  .intro-image-container img {
+    outline: 5px solid transparent;
+    outline-offset: 2px;
+    transition: outline-color 0.3s ease;
+  }
+
+  .intro-image-container img:hover {
+    outline-color: <%= @form.intro_image_hover_outline_color %>;
+  }
+
+  .form-content {
+    opacity: <%= @form.intro_image.attached? ? "0" : "1" %>;
+    transform: <%= @form.intro_image.attached? ? "translateY(20px)" : "translateY(0)" %>;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    display: <%= @form.intro_image.attached? ? "none" : "block" %>;
+  }
+
+  .fade-out {
+    opacity: 0;
+  }
+
+  .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   <%= @form.custom_css if @form.custom_css.present? %>
 </style>
 
-<header>
-  <% if @form.header_image.attached? %>
-    <%= image_tag url_for(@form.header_image) %>
-  <% end %>
-
-  <div>
-    <%= markdown(@form.header_text) %>
+<% if @form.intro_image.attached? %>
+  <div class="intro-image-container" id="intro-image-container">
+    <%= image_tag url_for(@form.intro_image), alt: "Click to show form" %>
   </div>
-</header>
+<% end %>
+
+<div class="form-content" id="form-content">
+  <header>
+    <% if @form.header_image.attached? %>
+      <%= image_tag url_for(@form.header_image) %>
+    <% end %>
+
+    <div>
+      <%= markdown(@form.header_text) %>
+    </div>
+  </header>
 
 <%= form_with(model: @submission, url: public_form_path(@form.id, @device.id), method: :post) do |f| %>
   <% if @submission.errors.any? %>
@@ -81,3 +120,33 @@
     <%= f.submit @form.button_text %>
   </div>
 <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const introImageContainer = document.getElementById('intro-image-container');
+    const formContent = document.getElementById('form-content');
+
+    if (introImageContainer) {
+      introImageContainer.addEventListener('click', function() {
+        // Fade out the intro image
+        introImageContainer.classList.add('fade-out');
+
+        // After the intro image starts fading out, show the form
+        setTimeout(function() {
+          // Hide the intro image completely
+          introImageContainer.style.display = 'none';
+
+          // Make the form visible but still transparent
+          formContent.style.display = 'block';
+
+          // Allow the browser to process the display change before adding the transition class
+          setTimeout(function() {
+            // Trigger the fade-in and rise-up animation
+            formContent.classList.add('fade-in');
+          }, 50);
+        }, 300);
+      });
+    }
+  });
+</script>
