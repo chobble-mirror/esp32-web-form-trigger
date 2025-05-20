@@ -20,6 +20,11 @@
     <%= form.text_field :location %>
   </div>
 
+  <div class="field">
+    <%= form.check_box :always_allow_credit_claim %>
+    <%= form.label :always_allow_credit_claim, "Always Allow Credit Claims" %>
+  </div>
+
   <div class="actions">
     <%= form.submit class: "button" %>
   </div>

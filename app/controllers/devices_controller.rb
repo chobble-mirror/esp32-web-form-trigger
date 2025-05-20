@@ -86,6 +86,6 @@ class DevicesController < ApplicationController
   end
 
   def device_params
-    params.require(:device).permit(:name, :location)
+    params.require(:device).permit(:name, :location, :always_allow_credit_claim)
   end
 end
