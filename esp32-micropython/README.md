@@ -1,8 +1,20 @@
 # ESP32 Web Form Trigger
 
 This MicroPython project allows an ESP32 to connect to your WiFi network, periodically check in with a server, and trigger a brief pulse on an output pin when either:
+
 1. The server responds with a success code (HTTP 200)
 2. The physical button on the ESP32 is pressed
+
+## Installing MicroPython
+
+- Download `esptool`: https://github.com/espressif/esptool/releases
+- Download this image: https://micropython.org/resources/firmware/ESP32_GENERIC-20250415-v1.25.0.bin
+
+And then flash the board with these instructions at the command line:
+
+```bash
+  esptool.py --baud 460800 write_flash 0x1000 ESP32_GENERIC-20250415-v1.25.0.bin
+```
 
 ## Monitoring and Debugging
 
@@ -25,6 +37,12 @@ rshell -p COM3  # Windows
 - **Linux**: Run `ls /dev/tty*` and look for `/dev/ttyUSB0` or similar
 - **macOS**: Run `ls /dev/cu.*` and look for `/dev/cu.SLAB_USBtoUART` or similar
 - **Windows**: Check Device Manager under "Ports (COM & LPT)" for COM ports
+
+## Copying Source Code
+
+- First, connect with rshell
+- Then, from this folder (containing main.py, config.py, etc) run:
+- `cp * /pyboard`
 
 ### Viewing Live Logs
 
