@@ -18,18 +18,6 @@
   <%= form.label :email %>
   <%= form.email_field :email %>
 
-  <% if current_user.admin? && @user != current_user %>
-    <article>
-      <% if @user.admin? %>
-        <%= button_to "Remove Admin Status", toggle_admin_user_path(@user), method: :post, 
-            data: { confirm: "Are you sure you want to remove admin status from #{@user.email}?" } %>
-      <% else %>
-        <%= button_to "Make User Admin", toggle_admin_user_path(@user), method: :post, 
-            data: { confirm: "Are you sure you want to give admin status to #{@user.email}?" } %>
-      <% end %>
-    </article>
-  <% end %>
-
   <%= form.label :password, "New Password (leave blank if no change)" %>
   <%= form.password_field :password %>
 
@@ -37,6 +25,20 @@
   <%= form.password_field :password_confirmation %>
 
   <%= form.submit "Update User" %>
+<% end %>
+
+<% if current_user.admin? && @user != current_user %>
+  <article>
+    <%= form_with(url: toggle_admin_user_path(@user), method: :post, local: true) do |admin_form| %>
+      <% if @user.admin? %>
+        <%= admin_form.submit "Remove Admin Status",
+            data: { confirm: "Are you sure you want to remove admin status from #{@user.email}?" } %>
+      <% else %>
+        <%= admin_form.submit "Make User Admin",
+            data: { confirm: "Are you sure you want to give admin status to #{@user.email}?" } %>
+      <% end %>
+    <% end %>
+  </article>
 <% end %>
 
 <% if @user != current_user %>
