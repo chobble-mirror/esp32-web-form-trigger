@@ -23,7 +23,11 @@ module Api
         unclaimed_submissions = Submission.unclaimed.for_device(device.id)
         submission_credits = unclaimed_submissions.count
         free_credit_available = device.free_credit
-        total_credits = always_allow ? 1 : submission_credits + (free_credit_available ? 1 : 0)
+        total_credits = if always_allow
+          1
+        else
+          submission_credits + (free_credit_available ? 1 : 0)
+        end
 
         render json: {
           device_id: device.id,
