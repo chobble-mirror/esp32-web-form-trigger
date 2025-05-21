@@ -57,3 +57,28 @@ def flash_led(times=1, duration=0.2):
             led.value(0)
         except:
             pass
+
+# Boot sequence constants
+BOOT_START = 1        # Program starts loading
+BOOT_WIFI_START = 2   # Starting to connect to WiFi
+BOOT_WIFI_CONNECTED = 3  # WiFi connected
+BOOT_FIRST_RESPONSE = 4  # First server response received
+
+def boot_sequence_flash(stage):
+    """
+    Flash the LED according to the boot sequence stage
+
+    Args:
+        stage (int): Boot sequence stage
+            1: Program starts loading
+            2: Starting WiFi connection
+            3: WiFi connected
+            4: First server response
+    """
+    # Map stage to number of flashes
+    flashes = stage  # Using stage directly as the number of flashes
+    print(f"Boot sequence stage {stage}: flashing {flashes} times")
+    flash_led(times=flashes, duration=0.15)
+
+    # Add a delay after flashing to make sequences more distinct
+    time.sleep(0.8)  # 800ms pause between boot sequence stages
