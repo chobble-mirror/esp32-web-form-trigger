@@ -28,13 +28,12 @@
             imagemagick
           ];
 
-          # Use bundler to manage Rails version instead of Nix
           shellHook = ''
             export GEM_HOME=$PWD/.gems
             export PATH=$GEM_HOME/bin:$PATH
-            echo "Installing dependencies from Gemfile..."
             gem install bundler
             bundle install
+            git pull
             echo "Ruby $(ruby --version) with Rails $(rails --version)"
           '';
         };
