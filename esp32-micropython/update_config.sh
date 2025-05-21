@@ -6,6 +6,28 @@
 echo "ESP32 Configuration Updater"
 echo "==========================="
 
+# Set up Python virtual environment and install rshell
+echo "Setting up Python environment..."
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+fi
+
+# Activate virtual environment
+if [[ "$OSTYPE" == "darwin"* ]] || [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    source venv/bin/activate
+elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+    source venv/Scripts/activate
+else
+    echo "Unsupported OS type: $OSTYPE"
+    exit 1
+fi
+
+# Install rshell if not already installed
+if ! pip list | grep -q "rshell"; then
+    echo "Installing rshell..."
+    pip install rshell
+fi
+
 # Get device ID
 read -p "Enter Device ID: " device_id
 if [ -z "$device_id" ]; then
