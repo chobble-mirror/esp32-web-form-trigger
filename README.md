@@ -1,16 +1,16 @@
 # ESP32 Web Form Trigger
 
-A Ruby on Rails application for collecting contact form submissions and triggering credits on arcade machines.
+A Ruby on Rails application for collecting web form submissions and triggering ESP32 pins.
 
 ## Overview
 
 This application allows you to:
 
-1. Create customizable contact forms
-2. Associate forms with specific devices (arcade machines)
+1. Create customizable web forms
+2. Associate forms with specific ESP32 devices
 3. Collect user information through form submissions
 4. Email submissions to designated contacts
-5. Provide an API for devices to check and claim credits
+5. Provide an API for devices to check and trigger pins
 
 ## Models
 
@@ -23,7 +23,7 @@ This application allows you to:
 ### Forms
 
 - Header image: Optional image for the form
-- Visual customization: Background color, text color, button color, button text color
+- Visual customization: Background color, text color, button color
 - Content: Button text, header text (markdown)
 - Field options: Enable/disable name, email, phone, address, postcode fields
 - Terms and conditions: Optional markdown text
@@ -36,15 +36,15 @@ Each submission records:
 
 - Associated form and device
 - User details (name, email, phone, address, postcode) based on enabled fields
-- Credit status (claimed/unclaimed)
+- Pin trigger status
 - Email delivery status and timestamp
 
 ## API Endpoints
 
-For devices to check and claim credits:
+For devices to check and trigger pins:
 
-- `GET /api/v1/credits/check` - Check available credits
-- `POST /api/v1/credits/claim` - Claim a credit
+- `GET /api/v1/credits/check` - Check available triggers
+- `POST /api/v1/credits/claim` - Trigger a pin
 
 ## Public Form URLs
 
@@ -98,13 +98,7 @@ DEFAULT_EMAIL_FROM=noreply@example.com  # Default sender address
 
 ### Email Queue Monitoring
 
-Administrators can monitor the email queue status at `/email_queues`. This page shows:
-
-- Queue summary statistics
-- Pending email jobs
-- Failed submissions with retry options
-- Failed jobs with error details
-- Recently completed emails
+Administrators can monitor the email queue status at `/email_queues`.
 
 ### Background Processing
 
@@ -131,10 +125,3 @@ docker run -d -p 3000:3000 \
 # Or use Docker Compose
 docker-compose up -d
 ```
-
-The Docker setup:
-
-- Runs Rails server and SolidQueue worker in the same container
-- Automatically migrates the database on startup
-- Ensures clean shutdown of both processes
-- Configures email delivery via environment variables
