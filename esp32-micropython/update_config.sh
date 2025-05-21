@@ -22,8 +22,16 @@ fi
 
 # Update config.py file
 echo "Updating config.py..."
-sed -i "s/DEVICE_ID = \".*\"/DEVICE_ID = \"$device_id\"/" config.py
-sed -i "s/PULSE_DURATION_MS = [0-9]*/PULSE_DURATION_MS = $pulse_duration/" config.py
+# Handle sed differences between GNU (Linux) and BSD (macOS) versions
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS (BSD) version requires extension for -i
+    sed -i '' "s/DEVICE_ID = \".*\"/DEVICE_ID = \"$device_id\"/" config.py
+    sed -i '' "s/PULSE_DURATION_MS = [0-9]*/PULSE_DURATION_MS = $pulse_duration/" config.py
+else
+    # Linux (GNU) version
+    sed -i "s/DEVICE_ID = \".*\"/DEVICE_ID = \"$device_id\"/" config.py
+    sed -i "s/PULSE_DURATION_MS = [0-9]*/PULSE_DURATION_MS = $pulse_duration/" config.py
+fi
 
 echo "Updated config.py with Device ID: $device_id and Pulse Duration: ${pulse_duration}ms"
 
