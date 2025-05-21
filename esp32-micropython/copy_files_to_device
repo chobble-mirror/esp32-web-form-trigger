@@ -1,1 +1,69 @@
-rshell --port /dev/cu.usbserial-0001 "cp * /pyboard"
+#!/usr/bin/env bash
+
+# Function to detect port
+detect_port() {
+    local port=""
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # MacOS
+        port=$(ls /dev/cu.usbserial-* 2>/dev/null | head -n 1)
+        if [ -z "$port" ]; then
+            port=$(ls /dev/tty.usbserial-* 2>/dev/null | head -n 1)
+        fi
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        # Linux
+        port=$(ls /dev/ttyUSB* 2>/dev/null | head -n 1)
+        if [ -z "$port" ]; then
+            port=$(ls /dev/ttyACM* 2>/dev/null | head -n 1)
+        fi
+    elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+        # Windows
+        echo "On Windows, please specify the COM port manually."
+        read -p "Enter COM port (e.g., COM3): " port
+    fi
+
+    echo "$port"
+}
+
+# Get port
+PORT=$(detect_port)
+
+# Check if port was found or prompt user
+if [ -z "$PORT" ]; then
+    echo "No ESP32 device detected automatically."
+    read -p "Please enter the port manually: " PORT
+    if [ -z "$PORT" ]; then
+        echo "Error: No port specified"
+        exit 1
+    fi
+fi
+
+echo "Uploading files to ESP32 on port $PORT..."
+
+# Make sure we're in a virtual environment with rshell
+if [ -z "$VIRTUAL_ENV" ]; then
+    if [ -d "venv" ]; then
+        if [[ "$OSTYPE" == "darwin"* ]] || [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            source venv/bin/activate
+        elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+            source venv/Scripts/activate
+        fi
+        echo "Activated virtual environment"
+    else
+        echo "Warning: Not running in a virtual environment. Make sure rshell is installed."
+    fi
+fi
+
+# Files to copy
+FILES="boot.py config.py led_control.py main.py opto_control.py post_request.py relay_control.py wifi.py"
+
+# Copy files to device
+rshell --port "$PORT" "cp $FILES /pyboard"
+exit_code=$?
+
+if [ $exit_code -ne 0 ]; then
+    echo "Error copying files. Exit code: $exit_code"
+    exit 1
+fi
+
+echo "Files copied successfully to $PORT"
