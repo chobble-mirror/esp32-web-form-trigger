@@ -94,7 +94,7 @@ RSpec.describe "Submissions", type: :request do
       end
 
       it "allows access when logged in" do
-        admin = login_as_admin
+        login_as_admin
         get public_form_path(form.id, device.id)
         expect(response).to have_http_status(:success)
       end

@@ -1,5 +1,5 @@
 class PublicFormsController < ApplicationController
-  require 'rqrcode'
+  require "rqrcode"
 
   # Skip login for public form views, but check if the form requires login
   skip_before_action :require_login
@@ -57,16 +57,16 @@ class PublicFormsController < ApplicationController
       bit_depth: 1,
       border_modules: 4,
       color_mode: ChunkyPNG::COLOR_GRAYSCALE,
-      color: 'black',
+      color: "black",
       file: nil,
-      fill: 'white',
+      fill: "white",
       module_px_size: size / qrcode.modules.size,
       resize_exactly_to: false,
       resize_gte_to: false
     )
 
     # Send the PNG image as a response
-    send_data png.to_s, type: 'image/png', disposition: 'inline'
+    send_data png.to_s, type: "image/png", disposition: "inline"
   end
 
   private
@@ -85,7 +85,7 @@ class PublicFormsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     # Return a default 'not found' QR code or error image
     blank_qr = ChunkyPNG::Image.new(200, 200, ChunkyPNG::Color::WHITE)
-    send_data blank_qr.to_s, type: 'image/png', disposition: 'inline'
+    send_data blank_qr.to_s, type: "image/png", disposition: "inline"
   end
 
   def check_form_access
