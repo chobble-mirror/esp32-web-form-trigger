@@ -96,7 +96,7 @@ RSpec.describe "Submissions", type: :request do
       expect(response.body).to include("Thank You")
       expect(response.body).to include("Your submission has been received")
     end
-    
+
     it "shows the start over button when configured" do
       form.update!(start_over_button_text: "Start Again")
       post public_form_path(form.code, device.id), params: {
