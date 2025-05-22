@@ -1,0 +1,15 @@
+Error: <%= @exception.class.name %>: <%= @exception.message %>
+
+<% if @request %>
+Request:
+  URL: <%= @request.url %>
+  Method: <%= @request.method %>
+  IP: <%= @request.remote_ip %>
+  User Agent: <%= @request.user_agent %>
+  Timestamp: <%= Time.current %>
+<% end %>
+
+Backtrace:
+<% @backtrace.each do |line| %>
+  <%= line %>
+<% end %>
