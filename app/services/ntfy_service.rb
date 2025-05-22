@@ -5,7 +5,7 @@ class NtfyService
     def notify(message)
       puts "NtfyService: About to send notification in #{Thread.current.object_id}"
       puts "NtfyService: Message: #{message}"
-      
+
       # Use a background thread for normal operation
       Thread.new do
         send_notification(message)
@@ -32,7 +32,7 @@ class NtfyService
       end
 
       puts "NtfyService: Sending to channel #{channel}"
-      
+
       # Setup HTTP request
       uri = URI.parse("https://ntfy.sh/#{channel}")
       http = Net::HTTP.new(uri.host, uri.port)
@@ -48,9 +48,9 @@ class NtfyService
 
       # Send request and handle response
       response = http.request(request)
-      
+
       puts "NtfyService: Response status: #{response.code}"
-      
+
       # Return response for sync mode
       response
     rescue => e

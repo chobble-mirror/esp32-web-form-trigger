@@ -3,22 +3,22 @@ namespace :test do
   task notifications: :environment do
     # Enable debug mode for this task
     ENV["DEBUG"] = "true"
-    
+
     begin
       puts "Testing notifications directly..."
-      puts "ERROR_EMAIL: #{ENV['ERROR_EMAIL'] || 'not configured'}"
-      puts "NTFY_CHANNEL: #{ENV['NTFY_CHANNEL'] || 'not configured'}"
-      
+      puts "ERROR_EMAIL: #{ENV["ERROR_EMAIL"] || "not configured"}"
+      puts "NTFY_CHANNEL: #{ENV["NTFY_CHANNEL"] || "not configured"}"
+
       # Test email
       if ENV["ERROR_EMAIL"].present?
-        puts "Sending test email to #{ENV['ERROR_EMAIL']}..."
+        puts "Sending test email to #{ENV["ERROR_EMAIL"]}..."
         mail = ActionMailer::Base.mail(
           to: ENV["ERROR_EMAIL"],
           from: ENV.fetch("DEFAULT_EMAIL_FROM", "noreply@example.com"),
           subject: "Test email from Rails app",
           body: "This is a test email sent at #{Time.current}"
         )
-        
+
         # Use deliver_now for immediate delivery in test
         begin
           result = mail.deliver_now
@@ -31,10 +31,10 @@ namespace :test do
       else
         puts "ERROR_EMAIL not configured, skipping email test."
       end
-      
+
       # Test ntfy
       if ENV["NTFY_CHANNEL"].present?
-        puts "Sending test ntfy notification to channel #{ENV['NTFY_CHANNEL']}..."
+        puts "Sending test ntfy notification to channel #{ENV["NTFY_CHANNEL"]}..."
         begin
           # Use the synchronous method for testing
           response = NtfyService.send_notification_sync("Test notification from Rails app at #{Time.current}")
@@ -47,7 +47,7 @@ namespace :test do
       else
         puts "NTFY_CHANNEL not configured, skipping ntfy test."
       end
-      
+
       puts "Testing complete."
     rescue => e
       puts "Error during notification test: #{e.class}: #{e.message}"
