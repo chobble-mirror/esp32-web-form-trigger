@@ -10,7 +10,8 @@ RSpec.describe "Forms", type: :request do
       button_text_color: "#ffffff",
       button_text: "Submit",
       header_text: "Test form",
-      target_email_address: "test@example.com"
+      target_email_address: "test@example.com",
+      token_validity_seconds: 120
     )
   end
 
@@ -131,7 +132,34 @@ RSpec.describe "Forms", type: :request do
               name: "New Form",
               button_text: "New Form",
               header_text: "New Header",
-              target_email_address: "new@example.com"
+              target_email_address: "new@example.com",
+              token_validity_seconds: 180
+            }
+          }
+        }.to change(Form, :count).by(1)
+        expect(response).to have_http_status(:redirect)
+        expect(Form.last.token_validity_seconds).to eq(180)
+      end
+
+      it "allows form creation without header_text" do
+        expect {
+          post forms_path, params: {
+            form: {
+              name: "Form No Header",
+              button_text: "Submit Form",
+              target_email_address: "no-header@example.com"
+            }
+          }
+        }.to change(Form, :count).by(1)
+        expect(response).to have_http_status(:redirect)
+      end
+
+      it "allows form creation without target_email_address" do
+        expect {
+          post forms_path, params: {
+            form: {
+              name: "Form No Email",
+              button_text: "Submit Form"
             }
           }
         }.to change(Form, :count).by(1)

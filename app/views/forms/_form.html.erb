@@ -19,7 +19,27 @@
     <legend>Appearance</legend>
 
     <div>
-      <%= f.label :header_image %>
+      <%= f.label :intro_image, "Intro Image (shown before form)" %>
+      <%= f.file_field :intro_image %>
+      <% if form.intro_image.attached? %>
+        <div class="current-image">
+          <p>Current image: <%= form.intro_image.filename %> (<%= number_to_human_size(form.intro_image.byte_size) %>)</p>
+          <div class="thumbnail">
+            <%= image_tag url_for(form.intro_image), style: "max-height: 100px; max-width: 300px;" %>
+          </div>
+          <%= link_to "Remove image", "#",
+                      class: "remove-image",
+                      data: {
+                        confirm: "Are you sure you want to remove this intro image?",
+                        image_type: "intro_image",
+                        form_id: form.id
+                      } %>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :header_image, "Form Header Image" %>
       <%= f.file_field :header_image %>
       <% if form.header_image.attached? %>
         <div class="current-image">
@@ -39,19 +59,19 @@
     </div>
 
     <div>
-      <%= f.label :intro_image, "Intro Image (shown before form)" %>
-      <%= f.file_field :intro_image %>
-      <% if form.intro_image.attached? %>
+      <%= f.label :thank_you_image, "Thank You Image (shown on thank you page)" %>
+      <%= f.file_field :thank_you_image %>
+      <% if form.thank_you_image.attached? %>
         <div class="current-image">
-          <p>Current image: <%= form.intro_image.filename %> (<%= number_to_human_size(form.intro_image.byte_size) %>)</p>
+          <p>Current image: <%= form.thank_you_image.filename %> (<%= number_to_human_size(form.thank_you_image.byte_size) %>)</p>
           <div class="thumbnail">
-            <%= image_tag url_for(form.intro_image), style: "max-height: 100px; max-width: 300px;" %>
+            <%= image_tag url_for(form.thank_you_image), style: "max-height: 100px; max-width: 300px;" %>
           </div>
           <%= link_to "Remove image", "#",
                       class: "remove-image",
                       data: {
-                        confirm: "Are you sure you want to remove this intro image?",
-                        image_type: "intro_image",
+                        confirm: "Are you sure you want to remove this thank you image?",
+                        image_type: "thank_you_image",
                         form_id: form.id
                       } %>
         </div>
@@ -104,7 +124,7 @@
     
     <div>
       <%= f.label :header_text, "Header Text (Markdown)" %>
-      <%= f.text_area :header_text, rows: 5, required: true %>
+      <%= f.text_area :header_text, rows: 5 %>
     </div>
 
     <div>
@@ -217,7 +237,7 @@
 
     <div>
       <%= f.label :target_email_address %>
-      <%= f.email_field :target_email_address, required: true %>
+      <%= f.email_field :target_email_address %>
     </div>
   </fieldset>
 
@@ -227,6 +247,16 @@
     <div>
       <%= f.check_box :require_login %>
       <%= f.label :require_login, "Require Login (form will only be accessible to logged-in users)" %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Token Validity</legend>
+
+    <div>
+      <%= f.label :token_validity_seconds, "Token Validity (seconds)" %>
+      <%= f.number_field :token_validity_seconds, min: 1, required: true %>
+      <span class="field-hint">How long a token is valid for claiming a submission (in seconds)</span>
     </div>
   </fieldset>
 

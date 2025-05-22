@@ -11,6 +11,7 @@ class Submission < ApplicationRecord
 
   scope :unclaimed, -> { where(credit_claimed: false) }
   scope :for_device, ->(device_id) { where(device_id: device_id) }
+  scope :recent, ->(seconds) { where("created_at > ?", seconds.seconds.ago) }
 
   def mark_as_claimed!
     update!(credit_claimed: true)

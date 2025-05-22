@@ -11,7 +11,8 @@ RSpec.describe "Submissions", type: :request do
       button_text_color: "#ffffff",
       button_text: "Submit",
       header_text: "Test form",
-      target_email_address: "test@example.com"
+      target_email_address: "test@example.com",
+      token_validity_seconds: 120
     )
   end
   let!(:submission) do
@@ -81,6 +82,26 @@ RSpec.describe "Submissions", type: :request do
         }
       }.to change(Submission, :count).by(1)
       expect(response).to redirect_to(form_thanks_path(form, device))
+    end
+
+    it "does not send emails for forms without target_email_address" do
+      form_without_email = Form.create!(
+        name: "Form Without Email",
+        button_text: "Submit",
+        target_email_address: ""
+      )
+
+      # Should not attempt to deliver email
+      expect(SubmissionMailer).not_to receive(:new_submission)
+
+      post public_form_path(form_without_email.id, device.id), params: {
+        submission: {
+          name: "No Email User",
+          email_address: "no-email@example.com"
+        }
+      }
+
+      expect(response).to redirect_to(form_thanks_path(form_without_email, device))
     end
 
     context "with a form that requires login" do

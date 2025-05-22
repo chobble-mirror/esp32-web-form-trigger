@@ -57,9 +57,11 @@
       <%= image_tag url_for(@form.header_image) %>
     <% end %>
 
+    <% if @form.header_text.present? %>
     <div>
       <%= markdown(@form.header_text) %>
     </div>
+    <% end %>
   </header>
 
 <%= form_with(model: @submission, url: public_form_path(@form.id, @device.id), method: :post) do |f| %>

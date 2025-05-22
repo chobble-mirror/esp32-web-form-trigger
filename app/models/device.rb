@@ -3,6 +3,7 @@ class Device < ApplicationRecord
   before_validation :generate_id, on: :create
 
   has_many :submissions, dependent: :destroy
+  has_and_belongs_to_many :forms
 
   validates :id, presence: true, uniqueness: true, length: {is: 12}
   validates :name, presence: true

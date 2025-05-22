@@ -20,15 +20,17 @@ class PublicFormsController < ApplicationController
     @submission.user = current_user if current_user
 
     if @submission.save
-      # Send the submission email
-      begin
-        SubmissionMailer.new_submission(@submission).deliver_later
-        # Email will be sent asynchronously, so we mark it as pending
-        # It will be updated when the job completes
-      rescue => e
-        # Log the error but continue with the form submission
-        Rails.logger.error "Failed to queue submission email: #{e.message}"
-        @submission.mark_as_failed!
+      # Send the submission email only if target_email_address is present
+      if @form.target_email_address.present?
+        begin
+          SubmissionMailer.new_submission(@submission).deliver_later
+          # Email will be sent asynchronously, so we mark it as pending
+          # It will be updated when the job completes
+        rescue => e
+          # Log the error but continue with the form submission
+          Rails.logger.error "Failed to queue submission email: #{e.message}"
+          @submission.mark_as_failed!
+        end
       end
 
       # Redirect to thanks page instead of rendering

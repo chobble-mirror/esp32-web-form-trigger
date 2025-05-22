@@ -3,6 +3,13 @@
     background-color: <%= @form.background_color %>;
     color: <%= @form.text_color %>;
   }
+
+  .thank-you-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+  }
 </style>
 <meta http-equiv="refresh" content="20; url=<%= public_form_path(@form, @device) %>">
 
@@ -19,6 +26,10 @@
     <% else %>
       <h1>Thank You</h1>
       <p>Your submission has been received. A credit has been added to the arcade machine.</p>
+    <% end %>
+
+    <% if @form.thank_you_image.attached? %>
+      <%= image_tag url_for(@form.thank_you_image), class: "thank-you-image", alt: "Thank you" %>
     <% end %>
 
     <% if @form.start_over_button_text.present? %>

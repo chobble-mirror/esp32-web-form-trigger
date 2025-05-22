@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_114626) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_22_170930) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -51,6 +51,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_114626) do
     t.index ["archived"], name: "index_devices_on_archived"
   end
 
+  create_table "devices_forms", id: false, force: :cascade do |t|
+    t.integer "device_id", null: false
+    t.integer "form_id", null: false
+    t.index ["device_id", "form_id"], name: "index_devices_forms_on_device_id_and_form_id", unique: true
+    t.index ["form_id", "device_id"], name: "index_devices_forms_on_form_id_and_device_id"
+  end
+
   create_table "forms", force: :cascade do |t|
     t.string "background_color"
     t.string "text_color"
@@ -83,6 +90,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_114626) do
     t.string "postcode_field_label", default: "Postcode"
     t.string "postcode_field_placeholder", default: ""
     t.boolean "require_login", default: false
+    t.integer "token_validity_seconds", default: 60, null: false
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|

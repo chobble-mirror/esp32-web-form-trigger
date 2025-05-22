@@ -47,6 +47,9 @@ class FormsController < ApplicationController
     elsif image_type == "intro_image" && @form.intro_image.attached?
       @form.intro_image.purge
       notice = "Intro image was successfully removed."
+    elsif image_type == "thank_you_image" && @form.thank_you_image.attached?
+      @form.thank_you_image.purge
+      notice = "Thank you image was successfully removed."
     else
       notice = "No image was found to remove."
     end
@@ -65,6 +68,7 @@ class FormsController < ApplicationController
       :name,
       :header_image,
       :intro_image,
+      :thank_you_image,
       :background_color,
       :text_color,
       :button_color,
@@ -83,6 +87,7 @@ class FormsController < ApplicationController
       :target_email_address,
       :custom_css,
       :require_login,
+      :token_validity_seconds,
       :name_field_label,
       :name_field_placeholder,
       :email_field_label,
