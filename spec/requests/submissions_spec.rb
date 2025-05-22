@@ -82,5 +82,37 @@ RSpec.describe "Submissions", type: :request do
       }.to change(Submission, :count).by(1)
       expect(response).to redirect_to(form_thanks_path(form, device))
     end
+
+    context "with a form that requires login" do
+      before do
+        form.update!(require_login: true)
+      end
+
+      it "redirects to login when not logged in" do
+        get public_form_path(form.id, device.id)
+        expect(response).to redirect_to(login_path)
+      end
+
+      it "allows access when logged in" do
+        admin = login_as_admin
+        get public_form_path(form.id, device.id)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "associates submission with logged in user" do
+        admin = login_as_admin
+
+        expect {
+          post public_form_path(form.id, device.id), params: {
+            submission: {
+              name: "Logged In User",
+              email_address: "loggedin@example.com"
+            }
+          }
+        }.to change(Submission, :count).by(1)
+
+        expect(Submission.last.user).to eq(admin)
+      end
+    end
   end
 end

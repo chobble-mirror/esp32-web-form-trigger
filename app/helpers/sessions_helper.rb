@@ -35,7 +35,8 @@ module SessionsHelper
 
   # Store the URL trying to be accessed
   def store_location
-    session[:forwarding_url] = request.original_url if request.get?
+    # Check for both GET and HEAD requests (Rails treats HEAD as GET)
+    session[:forwarding_url] = request.original_url if request.get? || request.head?
   end
 
   # Redirects to stored location (or to the default)
