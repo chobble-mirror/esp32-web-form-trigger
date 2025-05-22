@@ -2,7 +2,7 @@ class PublicCodesController < ApplicationController
   skip_before_action :require_login
   before_action :set_code
   layout "public_forms"
-  
+
   def show
     if @code.form.require_login? && !logged_in?
       store_location
@@ -15,20 +15,20 @@ class PublicCodesController < ApplicationController
       # Still set the form and device for the thank you page
       @form = @code.form
       @device = @code.device
-      render 'public_forms/thanks'
+      render "public_forms/thanks"
       return
     end
 
     @form = @code.form
     @device = @code.device
     @submission = Submission.new
-    render 'public_forms/show'
+    render "public_forms/show"
   end
-  
+
   def thanks
     @form = @code.form
     @device = @code.device
-    render 'public_forms/thanks'
+    render "public_forms/thanks"
   end
 
   def create
@@ -40,7 +40,7 @@ class PublicCodesController < ApplicationController
     # Check if the code has already been claimed
     if @code.claimed?
       @submission.errors.add(:base, "This code has already been used")
-      return render 'public_forms/show', status: :unprocessable_entity
+      return render "public_forms/show", status: :unprocessable_entity
     end
 
     # Associate the submission with the current user if logged in
@@ -66,10 +66,10 @@ class PublicCodesController < ApplicationController
       # Redirect to thanks page instead of rendering
       redirect_to code_thanks_path(@code)
     else
-      render 'public_forms/show', status: :unprocessable_entity
+      render "public_forms/show", status: :unprocessable_entity
     end
   end
-  
+
   private
 
   def set_code

@@ -47,7 +47,6 @@ class CodesController < ApplicationController
     end
   end
 
-
   def new
     @code = Code.new
     @devices = Device.all
@@ -65,7 +64,7 @@ class CodesController < ApplicationController
       error_message = []
       error_message << "Device not found" if !device
       error_message << "Form not found" if !form
-      flash[:error] = "Error creating codes: #{error_message.join(', ')}"
+      flash[:error] = "Error creating codes: #{error_message.join(", ")}"
       redirect_to new_code_path
       return
     end
@@ -79,7 +78,7 @@ class CodesController < ApplicationController
         if code.save
           created_codes << code
         else
-          flash[:error] = "Error creating codes: #{code.errors.full_messages.join(', ')}"
+          flash[:error] = "Error creating codes: #{code.errors.full_messages.join(", ")}"
           redirect_to new_code_path
           return
         end
@@ -130,7 +129,7 @@ class CodesController < ApplicationController
   end
 
   def generate_qr_code_zip
-    temp_file = Tempfile.new(['qr_codes', '.zip'])
+    temp_file = Tempfile.new(["qr_codes", ".zip"])
     begin
       # Create a zip file
       Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
