@@ -60,8 +60,8 @@ module Api
         # Use the token_validity_seconds from the form to determine how recent the submission must be
         # Get unclaimed submissions for this device, ordered by creation time (oldest first)
         unclaimed_submissions = Submission.unclaimed
-                                        .for_device(device.id)
-                                        .order(created_at: :asc)
+          .for_device(device.id)
+          .order(created_at: :asc)
 
         submission = nil
         # Check each submission against its form's token_validity_seconds

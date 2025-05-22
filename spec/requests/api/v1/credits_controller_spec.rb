@@ -24,7 +24,7 @@ RSpec.describe "API V1 Credits", type: :request do
   end
 
   def create_submission(form, device, attributes = {})
-    defaults = { name: "Test User", credit_claimed: false }
+    defaults = {name: "Test User", credit_claimed: false}
     Submission.create!(defaults.merge(attributes).merge(device: device, form: form))
   end
 
@@ -56,7 +56,7 @@ RSpec.describe "API V1 Credits", type: :request do
 
   describe "POST /api/v1/credits/claim" do
     # Define subject for the request
-    subject { post "/api/v1/credits/claim", params: { device_id: device_id } }
+    subject { post "/api/v1/credits/claim", params: {device_id: device_id} }
     let(:device_id) { device.id }
 
     context "with an invalid device_id" do
@@ -174,18 +174,18 @@ RSpec.describe "API V1 Credits", type: :request do
             submission2 = create_submission(form, device, name: "User 2")
 
             # Claim first submission
-            post "/api/v1/credits/claim", params: { device_id: device.id }
+            post "/api/v1/credits/claim", params: {device_id: device.id}
             expect(submission1.reload.credit_claimed).to eq(true)
 
             # Claim second submission
-            post "/api/v1/credits/claim", params: { device_id: device.id }
+            post "/api/v1/credits/claim", params: {device_id: device.id}
             expect(submission2.reload.credit_claimed).to eq(true)
 
             # Free credit should still not be claimed
             expect(device.reload.free_credit).to eq(true)
 
             # Claim free credit last
-            post "/api/v1/credits/claim", params: { device_id: device.id }
+            post "/api/v1/credits/claim", params: {device_id: device.id}
             expect(device.reload.free_credit).to eq(false)
             expect(json_response["source"]).to eq("free_credit")
           end
@@ -230,15 +230,15 @@ RSpec.describe "API V1 Credits", type: :request do
           submission = create_submission(form, device)
 
           # Claim submission credit
-          post "/api/v1/credits/claim", params: { device_id: device.id }
+          post "/api/v1/credits/claim", params: {device_id: device.id}
           expect(submission.reload.credit_claimed).to eq(true)
 
           # Claim free credit
-          post "/api/v1/credits/claim", params: { device_id: device.id }
+          post "/api/v1/credits/claim", params: {device_id: device.id}
           expect(device.reload.free_credit).to eq(false)
 
           # Attempt to claim when no credits are available
-          post "/api/v1/credits/claim", params: { device_id: device.id }
+          post "/api/v1/credits/claim", params: {device_id: device.id}
           expect(response).to have_http_status(:not_found)
           expect(json_response).to include(
             "success" => false,
@@ -250,7 +250,7 @@ RSpec.describe "API V1 Credits", type: :request do
   end
 
   describe "GET /api/v1/credits/check" do
-    subject { get "/api/v1/credits/check", params: { device_id: device_id } }
+    subject { get "/api/v1/credits/check", params: {device_id: device_id} }
     let(:device_id) { device.id }
 
     context "with an invalid device_id" do

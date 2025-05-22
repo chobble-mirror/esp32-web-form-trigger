@@ -1,14 +1,14 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V1::CreditsController, type: :controller do
   # Helper methods for test setup
   def create_device(attributes = {})
-    defaults = { name: "Test Device", location: "Test Location" }
+    defaults = {name: "Test Device", location: "Test Location"}
     Device.create!(defaults.merge(attributes))
   end
 
   def create_form(attributes = {})
-    defaults = { name: "Test Form", button_text: "Submit", token_validity_seconds: 120 }
+    defaults = {name: "Test Form", button_text: "Submit", token_validity_seconds: 120}
     Form.create!(defaults.merge(attributes))
   end
 
@@ -22,7 +22,7 @@ RSpec.describe Api::V1::CreditsController, type: :controller do
   end
 
   def create_submission_with_age(device, form, age, attributes = {})
-    attributes.merge!(created_at: age.ago)
+    attributes[:created_at] = age.ago
     create_submission(device, form, attributes)
   end
 
@@ -36,7 +36,7 @@ RSpec.describe Api::V1::CreditsController, type: :controller do
   end
 
   describe "POST #claim" do
-    subject { post :claim, params: { device_id: device.id }, format: :json }
+    subject { post :claim, params: {device_id: device.id}, format: :json }
 
     context "with submission within token_validity_seconds" do
       it "claims the submission if it's within token validity period" do

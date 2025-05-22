@@ -8,7 +8,7 @@ class Form < ApplicationRecord
   validates :name, presence: true
   validates :button_text, presence: true
   validates :target_email_address, format: {with: URI::MailTo::EMAIL_REGEXP}, allow_blank: true
-  validates :token_validity_seconds, numericality: { greater_than_or_equal_to: 1, only_integer: true }
+  validates :token_validity_seconds, numericality: {greater_than_or_equal_to: 1, only_integer: true}
 
   # Default colors if none provided
   before_validation :set_default_colors
