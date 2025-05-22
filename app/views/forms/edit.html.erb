@@ -2,6 +2,13 @@
   <h1>Edit Form</h1>
 </header>
 
+<div class="form-actions">
+  <% if Device.where(archived: false).any? %>
+    <% device = Device.where(archived: false).first %>
+    <%= link_to "View Public Form", public_form_path(@form.id, device.id), target: "_blank", class: "button" %>
+  <% end %>
+</div>
+
 <%= render 'form', form: @form %>
 
 <%= button_to form_path(@form), method: :delete, form: { data: { turbo_confirm: "Are you sure?" } } do %>

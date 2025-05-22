@@ -1,0 +1,7 @@
+- re-add the link to the public form
+- header text make not required
+- separate thank you page image
+- header image => Form Header Image
+- order: intro image first, form header image, thank you page image
+- make target email optional - double check it actually is and doesn't send
+- make a configurable token validity seconds per form and set to 1m by default
