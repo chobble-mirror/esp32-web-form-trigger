@@ -116,7 +116,7 @@
         <div id="form-preview" style="background-color: <%= form.background_color %>; color: <%= form.text_color %>;">
           <% if form.header_image.attached? %>
             <div class="preview-header-image">
-              <%= image_tag url_for(form.header_image), style: "max-width: 100%; max-height: 120px; margin-bottom: 15px;" %>
+              <%= image_tag url_for(form.header_image) %>
             </div>
           <% end %>
           <p class="preview-text">This is how your form will look to users</p>
