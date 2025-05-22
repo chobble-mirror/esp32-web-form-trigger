@@ -76,6 +76,14 @@ Rails.application.routes.draw do
   # Links admin
   get "links", to: "links#index"
 
+  # Codes management
+  resources :codes, except: [:edit, :update, :show]
+
+  # Public code routes
+  get "code/:id", to: "public_codes#show", as: "public_code"
+  post "code/:id", to: "public_codes#create"
+  get "code/:id/thanks", to: "public_codes#thanks", as: "code_thanks"
+
   # Email queue monitoring
   resources :email_queues, only: [:index] do
     member do

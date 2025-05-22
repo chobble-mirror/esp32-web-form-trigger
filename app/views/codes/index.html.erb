@@ -1,0 +1,121 @@
+<header>
+  <h1>Codes</h1>
+</header>
+
+<% if @devices.any? && @forms.any? %>
+  <p class="center">
+    <%= link_to new_code_path do %>
+      <strong>Generate New Codes</strong>
+    <% end %>
+  </p>
+
+  <% if @total_count > 0 %>
+    <p class="center">
+      <%= link_to codes_path(format: :csv, filter: params[:filter], device_id: params[:device_id], form_id: params[:form_id]) do %>
+        <strong>Export to CSV</strong>
+      <% end %>
+    </p>
+    <p class="center">
+      <%= link_to codes_path(format: :zip, filter: params[:filter], device_id: params[:device_id], form_id: params[:form_id]) do %>
+        <strong>Export as ZIP</strong>
+      <% end %>
+    </p>
+  <% end %>
+
+  <% if @total_count > 0 %>
+    <p class="center">
+      <strong>Status:</strong>
+      <%= link_to "all (#{@total_count})", codes_path, class: params[:filter].blank? ? 'active' : '' %>
+      / <%= link_to "unclaimed", codes_path(filter: 'unclaimed'), class: params[:filter] == 'unclaimed' ? 'active' : '' %>
+    </p>
+
+    <% if @devices.count > 1 %>
+      <p class="center">
+        <strong>Device:</strong>
+        <%= link_to "all", codes_path(filter: params[:filter], form_id: params[:form_id]), class: params[:device_id].blank? ? 'active' : '' %>
+        <% @devices.each do |device| %>
+          <% if @device_counts[device.id].to_i > 0 %>
+            / <%= link_to "#{device.name} (#{@device_counts[device.id]})",
+                  codes_path(device_id: device.id, filter: params[:filter], form_id: params[:form_id]),
+                  class: params[:device_id].to_s == device.id.to_s ? 'active' : '' %>
+          <% end %>
+        <% end %>
+      </p>
+    <% end %>
+
+    <% if @forms.count > 1 %>
+      <p class="center">
+        <strong>Form:</strong>
+        <%= link_to "all", codes_path(filter: params[:filter], device_id: params[:device_id]), class: params[:form_id].blank? ? 'active' : '' %>
+        <% @forms.each do |form| %>
+          <% if @form_counts[form.id].to_i > 0 %>
+            / <%= link_to "#{form.name} (#{@form_counts[form.id]})",
+                  codes_path(form_id: form.id, filter: params[:filter], device_id: params[:device_id]),
+                  class: params[:form_id].to_s == form.id.to_s ? 'active' : '' %>
+          <% end %>
+        <% end %>
+      </p>
+    <% end %>
+
+    <% if @codes.any? %>
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Device</th>
+            <th>Form</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Link</th>
+            <th>QR Code</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @codes.each do |code| %>
+            <tr>
+              <td><code><%= code.id %></code></td>
+              <td><%= link_to code.device.name, edit_device_path(code.device) %></td>
+              <td><%= link_to code.form.name, edit_form_path(code.form) %></td>
+              <td>
+                <% if code.claimed_at %>
+                  Claimed
+                  <small>(<%= time_ago_in_words(code.claimed_at) %> ago)</small>
+                <% else %>
+                  Unclaimed
+                <% end %>
+              </td>
+              <td><%= code.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+              <td><%= link_to "Open", public_code_url(code.id), target: "_blank" %></td>
+              <td>
+                <%= link_to public_code_url(code.id), target: "_blank" do %>
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<%= CGI.escape(public_code_url(code.id)) %>" width="100" height="100" alt="QR Code">
+                <% end %>
+              </td>
+              <td>
+                <%= button_to code_path(code), method: :delete, data: { confirm: "Are you sure you want to delete this code?" } do %>
+                  Delete
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>No codes found with the current filters.</p>
+    <% end %>
+  <% else %>
+    <p>No codes found. Generate some codes to get started.</p>
+  <% end %>
+<% else %>
+  <p>
+    <% if !@devices.any? %>
+      No active devices available. <%= link_to "Create a device", new_device_path %> first.
+    <% end %>
+
+    <% if !@forms.any? %>
+      <% if !@devices.any? %><br><% end %>
+      No forms available. <%= link_to "Create a form", new_form_path %> first.
+    <% end %>
+  </p>
+<% end %>

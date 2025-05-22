@@ -60,4 +60,7 @@ gem "dotenv-rails"
 # CSV support for Ruby 3.4+
 gem "csv"
 
+# ZIP file creation
+gem "rubyzip"
+
 gem "rails-controller-testing", "~> 1.0", groups: [:development, :test]

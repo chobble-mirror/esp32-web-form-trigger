@@ -1,0 +1,32 @@
+<%= form_with(model: code) do |form| %>
+  <% if code.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(code.errors.count, "error") %> prohibited this code from being saved:</h2>
+      <ul>
+        <% code.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :device_id, "Device" %>
+    <%= form.collection_select :device_id, @devices, :id, :name, { prompt: "Select a device" }, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :form_id, "Form" %>
+    <%= form.collection_select :form_id, @forms, :id, :name, { prompt: "Select a form" }, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :count, "Number of codes to generate" %>
+    <%= number_field_tag :count, 1, min: 1, max: 10000, required: true %>
+    <span class="field-hint">Maximum 10,000 codes can be generated at once</span>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Generate Codes", class: "button" %>
+  </div>
+<% end %>

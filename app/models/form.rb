@@ -4,6 +4,7 @@ class Form < ApplicationRecord
   has_one_attached :thank_you_image
   has_many :submissions, dependent: :destroy
   has_and_belongs_to_many :devices
+  has_many :codes, dependent: :destroy
 
   validates :name, presence: true
   validates :button_text, presence: true

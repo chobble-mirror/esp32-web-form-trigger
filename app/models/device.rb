@@ -4,6 +4,7 @@ class Device < ApplicationRecord
 
   has_many :submissions, dependent: :destroy
   has_and_belongs_to_many :forms
+  has_many :codes, dependent: :destroy
 
   validates :id, presence: true, uniqueness: true, length: {is: 12}
   validates :name, presence: true
