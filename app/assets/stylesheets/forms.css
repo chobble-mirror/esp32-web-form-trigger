@@ -1,0 +1,36 @@
+/* Form field customization styles */
+.field-group {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+}
+
+.field-toggle {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.field-customization {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.field-customization div {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-customization label {
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+/* Hide customization options for disabled fields */
+input[type="checkbox"]:not(:checked) + label + .field-customization {
+  display: none;
+}

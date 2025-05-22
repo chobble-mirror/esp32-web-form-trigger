@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_20_163512) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_22_114626) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -72,6 +72,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_20_163512) do
     t.text "custom_css"
     t.string "start_over_button_text"
     t.string "intro_image_hover_outline_color"
+    t.string "name_field_label", default: "Name"
+    t.string "name_field_placeholder", default: ""
+    t.string "email_field_label", default: "Email Address"
+    t.string "email_field_placeholder", default: ""
+    t.string "phone_field_label", default: "Phone"
+    t.string "phone_field_placeholder", default: ""
+    t.string "address_field_label", default: "Address"
+    t.string "address_field_placeholder", default: ""
+    t.string "postcode_field_label", default: "Postcode"
+    t.string "postcode_field_placeholder", default: ""
+    t.boolean "require_login", default: false
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
@@ -209,9 +220,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_20_163512) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "failure_reason"
+    t.integer "user_id"
     t.index ["device_id", "credit_claimed"], name: "index_submissions_on_device_and_credit"
     t.index ["device_id"], name: "index_submissions_on_device_id"
     t.index ["form_id"], name: "index_submissions_on_form_id"
+    t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -234,4 +247,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_20_163512) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "submissions", "devices"
   add_foreign_key "submissions", "forms"
+  add_foreign_key "submissions", "users"
 end

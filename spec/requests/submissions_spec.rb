@@ -80,7 +80,7 @@ RSpec.describe "Submissions", type: :request do
           }
         }
       }.to change(Submission, :count).by(1)
-      expect(response).to have_http_status(:success)
+      expect(response).to redirect_to(form_thanks_path(form, device))
     end
   end
 end

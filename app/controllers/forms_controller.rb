@@ -81,7 +81,18 @@ class FormsController < ApplicationController
       :terms_and_conditions,
       :thank_you_text,
       :target_email_address,
-      :custom_css
+      :custom_css,
+      :require_login,
+      :name_field_label,
+      :name_field_placeholder,
+      :email_field_label,
+      :email_field_placeholder,
+      :phone_field_label,
+      :phone_field_placeholder,
+      :address_field_label,
+      :address_field_placeholder,
+      :postcode_field_label,
+      :postcode_field_placeholder
     )
   end
 end

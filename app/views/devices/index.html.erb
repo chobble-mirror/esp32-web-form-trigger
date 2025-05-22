@@ -25,6 +25,8 @@
         <th>ID</th>
         <th>Name</th>
         <th>Location</th>
+        <th>Last Heard From</th>
+        <th>Last Submission</th>
         <th>Created</th>
         <th></th>
       </tr>
@@ -40,6 +42,22 @@
             <% end %>
           </td>
           <td><%= device.location %></td>
+          <td>
+            <% if device.last_heard_from %>
+              <%= device.last_heard_from.strftime("%Y-%m-%d %H:%M") %>
+              <small>(<%= time_ago_in_words(device.last_heard_from) %> ago)</small>
+            <% else %>
+              Never
+            <% end %>
+          </td>
+          <td>
+            <% if @last_submissions[device.id] %>
+              <%= @last_submissions[device.id].strftime("%Y-%m-%d %H:%M") %>
+              <small>(<%= time_ago_in_words(@last_submissions[device.id]) %> ago)</small>
+            <% else %>
+              Never
+            <% end %>
+          </td>
           <td><%= device.created_at.strftime("%Y-%m-%d %H:%M") %></td>
           <td>
             <% if device.archived %>

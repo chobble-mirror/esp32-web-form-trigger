@@ -15,12 +15,7 @@
   <p>Here are public links to this form for all devices:</p>
 
   <% if Device.where(archived: false).any? %>
-    <% Device.where(archived: false).each do |device| %>
-      <p>
-        <%= link_to device.name, public_form_path(@form.id, device.id), target: "_blank" %>
-        <small><%= device.location %></small>
-      </p>
-    <% end %>
+    <%= render 'shared/form_device_links', devices: Device.where(archived: false), current_form: @form %>
   <% else %>
     <p>No active devices available. <%= link_to "Create a device", new_device_path %> first.</p>
   <% end %>

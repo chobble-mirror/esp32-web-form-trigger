@@ -13,7 +13,7 @@ class SubmissionsController < ApplicationController
     @total_count = Submission.count
 
     # Apply form filter if specified
-    base_query = Submission.includes(:form, :device)
+    base_query = Submission.includes(:form, :device, :user)
     if params[:form_id].present?
       @form = Form.find(params[:form_id])
       @submissions = base_query.where(form_id: params[:form_id]).order(created_at: :desc)
@@ -54,31 +54,53 @@ class SubmissionsController < ApplicationController
   private
 
   def set_submission
-    @submission = Submission.includes(:form, :device).find(params[:id])
+    @submission = Submission.includes(:form, :device, :user).find(params[:id])
   end
 
   def generate_csv
     CSV.generate(headers: true) do |csv|
+      # Determine which fields have data
+      has_user = @submissions.any? { |s| s.user.present? }
+      has_name = @submissions.any? { |s| s.name.present? }
+      has_email = @submissions.any? { |s| s.email_address.present? }
+      has_phone = @submissions.any? { |s| s.phone.present? }
+      has_address = @submissions.any? { |s| s.address.present? }
+      has_postcode = @submissions.any? { |s| s.postcode.present? }
+
+      # Build headers dynamically
+      headers = ["Date", "Form", "Device"]
+      headers << "Logged In User" if has_user
+      headers << "Name" if has_name
+      headers << "Email" if has_email
+      headers << "Phone" if has_phone
+      headers << "Address" if has_address
+      headers << "Postcode" if has_postcode
+      headers.concat(["Credit Status", "Email Status"])
+
       # Add headers
-      csv << [
-        "Date", "Form", "Device", "Name", "Email",
-        "Phone", "Address", "Postcode", "Credit Status", "Email Status"
-      ]
+      csv << headers
 
       # Add data
       @submissions.each do |submission|
-        csv << [
+        row = [
           submission.created_at.strftime("%Y-%m-%d %H:%M"),
           submission.form.name,
-          submission.device.name,
-          submission.name,
-          submission.email_address,
-          submission.phone,
-          submission.address,
-          submission.postcode,
+          submission.device.name
+        ]
+
+        row << submission.user&.email if has_user
+        row << submission.name if has_name
+        row << submission.email_address if has_email
+        row << submission.phone if has_phone
+        row << submission.address if has_address
+        row << submission.postcode if has_postcode
+
+        row.concat([
           submission.credit_claimed ? "Claimed" : "Available",
           submission.email_status
-        ]
+        ])
+
+        csv << row
       end
     end
   end

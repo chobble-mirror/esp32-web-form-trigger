@@ -1,6 +1,7 @@
 class Submission < ApplicationRecord
   belongs_to :form
   belongs_to :device
+  belongs_to :user, optional: true
 
   validates :name, presence: true, if: -> { form.enable_name }
   validates :email_address, presence: true, format: {with: URI::MailTo::EMAIL_REGEXP}, if: -> { form.enable_email_address }

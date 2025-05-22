@@ -1,0 +1,48 @@
+<header>
+  <h1>Form Links</h1>
+</header>
+
+<div class="center">
+  <p>This page lists all available device and form combinations with QR codes for easy access.</p>
+
+  <% if @devices.any? && @forms.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th>Form</th>
+          <th>Link</th>
+          <th>QR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @devices.each do |device| %>
+          <% @forms.each do |form| %>
+            <% url = public_form_url(form.id, device.id) %>
+            <tr>
+              <td><%= link_to device.name, edit_device_path(device) %></td>
+              <td><%= link_to form.name, edit_form_path(form) %></td>
+              <td><%= link_to "Open", url, target: "_blank" %></td>
+              <td>
+                <%= link_to form_qr_code_path(form.id, device.id, size: 2000), target: "_blank" do %>
+                  <%= image_tag form_qr_code_path(form.id, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>
+      <% if !@devices.any? %>
+        No active devices available. <%= link_to "Create a device", new_device_path %> first.
+      <% end %>
+      
+      <% if !@forms.any? %>
+        <% if !@devices.any? %><br><% end %>
+        No forms available. <%= link_to "Create a form", new_form_path %> first.
+      <% end %>
+    </p>
+  <% end %>
+</div>

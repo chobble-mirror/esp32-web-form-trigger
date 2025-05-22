@@ -120,39 +120,113 @@
 
   <fieldset>
     <legend>Form Fields</legend>
-    
-    <div>
-      <%= f.check_box :enable_name %>
-      <%= f.label :enable_name, "Enable Name Field" %>
+
+    <div class="field-group">
+      <div class="field-toggle">
+        <%= f.check_box :enable_name %>
+        <%= f.label :enable_name, "Enable Name Field" %>
+      </div>
+
+      <div class="field-customization">
+        <div>
+          <%= f.label :name_field_label, "Label" %>
+          <%= f.text_field :name_field_label %>
+        </div>
+        <div>
+          <%= f.label :name_field_placeholder, "Placeholder" %>
+          <%= f.text_field :name_field_placeholder, placeholder: "Optional placeholder text" %>
+        </div>
+      </div>
     </div>
 
-    <div>
-      <%= f.check_box :enable_email_address %>
-      <%= f.label :enable_email_address, "Enable Email Address Field" %>
+    <div class="field-group">
+      <div class="field-toggle">
+        <%= f.check_box :enable_email_address %>
+        <%= f.label :enable_email_address, "Enable Email Address Field" %>
+      </div>
+
+      <div class="field-customization">
+        <div>
+          <%= f.label :email_field_label, "Label" %>
+          <%= f.text_field :email_field_label %>
+        </div>
+        <div>
+          <%= f.label :email_field_placeholder, "Placeholder" %>
+          <%= f.text_field :email_field_placeholder, placeholder: "Optional placeholder text" %>
+        </div>
+      </div>
     </div>
 
-    <div>
-      <%= f.check_box :enable_phone %>
-      <%= f.label :enable_phone, "Enable Phone Field" %>
+    <div class="field-group">
+      <div class="field-toggle">
+        <%= f.check_box :enable_phone %>
+        <%= f.label :enable_phone, "Enable Phone Field" %>
+      </div>
+
+      <div class="field-customization">
+        <div>
+          <%= f.label :phone_field_label, "Label" %>
+          <%= f.text_field :phone_field_label %>
+        </div>
+        <div>
+          <%= f.label :phone_field_placeholder, "Placeholder" %>
+          <%= f.text_field :phone_field_placeholder, placeholder: "Optional placeholder text" %>
+        </div>
+      </div>
     </div>
 
-    <div>
-      <%= f.check_box :enable_address %>
-      <%= f.label :enable_address, "Enable Address Field" %>
+    <div class="field-group">
+      <div class="field-toggle">
+        <%= f.check_box :enable_address %>
+        <%= f.label :enable_address, "Enable Address Field" %>
+      </div>
+
+      <div class="field-customization">
+        <div>
+          <%= f.label :address_field_label, "Label" %>
+          <%= f.text_field :address_field_label %>
+        </div>
+        <div>
+          <%= f.label :address_field_placeholder, "Placeholder" %>
+          <%= f.text_field :address_field_placeholder, placeholder: "Optional placeholder text" %>
+        </div>
+      </div>
     </div>
 
-    <div>
-      <%= f.check_box :enable_postcode %>
-      <%= f.label :enable_postcode, "Enable Postcode Field" %>
+    <div class="field-group">
+      <div class="field-toggle">
+        <%= f.check_box :enable_postcode %>
+        <%= f.label :enable_postcode, "Enable Postcode Field" %>
+      </div>
+
+      <div class="field-customization">
+        <div>
+          <%= f.label :postcode_field_label, "Label" %>
+          <%= f.text_field :postcode_field_label %>
+        </div>
+        <div>
+          <%= f.label :postcode_field_placeholder, "Placeholder" %>
+          <%= f.text_field :postcode_field_placeholder, placeholder: "Optional placeholder text" %>
+        </div>
+      </div>
     </div>
   </fieldset>
 
   <fieldset>
     <legend>Notification</legend>
-    
+
     <div>
       <%= f.label :target_email_address %>
       <%= f.email_field :target_email_address, required: true %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Access Control</legend>
+
+    <div>
+      <%= f.check_box :require_login %>
+      <%= f.label :require_login, "Require Login (form will only be accessible to logged-in users)" %>
     </div>
   </fieldset>
 

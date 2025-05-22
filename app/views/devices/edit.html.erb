@@ -55,12 +55,7 @@
   <p>Here are public links to this device's forms:</p>
 
   <% if Form.any? %>
-    <% Form.all.each do |form| %>
-      <p>
-        <%= link_to form.name, public_form_path(form.id, @device.id), target: "_blank" %>
-        <small><%= form.target_email_address %></small>
-      </p>
-    <% end %>
+    <%= render 'shared/form_device_links', forms: Form.all, current_device: @device %>
   <% else %>
     <p>No forms available. <%= link_to "Create a form", new_form_path %> first.</p>
   <% end %>

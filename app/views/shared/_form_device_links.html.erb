@@ -1,0 +1,55 @@
+<% 
+  # This partial expects local variables:
+  # - forms: array of Form objects (optional)
+  # - devices: array of Device objects (optional)
+  # - current_device: a Device object (optional, used when showing forms for a specific device)
+  # - current_form: a Form object (optional, used when showing devices for a specific form)
+%>
+
+<table>
+  <thead>
+    <tr>
+      <th>Device</th>
+      <th>Form</th>
+      <th>Link</th>
+      <th>QR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if defined?(current_device) && current_device.present? && defined?(forms) && forms.any? %>
+      <% # Display all forms for a specific device %>
+      <% forms.each do |form| %>
+        <% url = public_form_url(form.id, current_device.id) %>
+        <tr>
+          <td><%= current_device.name %></td>
+          <td><%= link_to form.name, edit_form_path(form) %></td>
+          <td><%= link_to "Open", url, target: "_blank" %></td>
+          <td>
+            <%= link_to form_qr_code_path(form.id, current_device.id, size: 2000), target: "_blank" do %>
+              <%= image_tag form_qr_code_path(form.id, current_device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% elsif defined?(current_form) && current_form.present? && defined?(devices) && devices.any? %>
+      <% # Display all devices for a specific form %>
+      <% devices.each do |device| %>
+        <% url = public_form_url(current_form.id, device.id) %>
+        <tr>
+          <td><%= link_to device.name, edit_device_path(device) %></td>
+          <td><%= current_form.name %></td>
+          <td><%= link_to "Open", url, target: "_blank" %></td>
+          <td>
+            <%= link_to form_qr_code_path(current_form.id, device.id, size: 2000), target: "_blank" do %>
+              <%= image_tag form_qr_code_path(current_form.id, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">No forms or devices available.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
         cookies.delete(:user_id)
       end
       flash[:success] = "Logged in"
-      redirect_to root_path
+      redirect_back_or root_path
     else
       flash.now[:danger] = "Invalid email/password combination"
       render :new, status: :unprocessable_entity

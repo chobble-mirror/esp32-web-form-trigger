@@ -76,36 +76,36 @@
 
   <% if @form.enable_name %>
     <div>
-      <%= f.label :name %>
-      <%= f.text_field :name, required: @form.enable_name %>
+      <%= f.label :name, @form.name_field_label %>
+      <%= f.text_field :name, required: @form.enable_name, placeholder: @form.name_field_placeholder %>
     </div>
   <% end %>
 
   <% if @form.enable_email_address %>
     <div>
-      <%= f.label :email_address %>
-      <%= f.email_field :email_address, required: @form.enable_email_address %>
+      <%= f.label :email_address, @form.email_field_label %>
+      <%= f.email_field :email_address, required: @form.enable_email_address, placeholder: @form.email_field_placeholder %>
     </div>
   <% end %>
 
   <% if @form.enable_phone %>
     <div>
-      <%= f.label :phone %>
-      <%= f.telephone_field :phone, required: @form.enable_phone %>
+      <%= f.label :phone, @form.phone_field_label %>
+      <%= f.telephone_field :phone, required: @form.enable_phone, placeholder: @form.phone_field_placeholder %>
     </div>
   <% end %>
 
   <% if @form.enable_address %>
     <div>
-      <%= f.label :address %>
-      <%= f.text_area :address, rows: 3, required: @form.enable_address %>
+      <%= f.label :address, @form.address_field_label %>
+      <%= f.text_area :address, rows: 3, required: @form.enable_address, placeholder: @form.address_field_placeholder %>
     </div>
   <% end %>
 
   <% if @form.enable_postcode %>
     <div>
-      <%= f.label :postcode %>
-      <%= f.text_field :postcode, required: @form.enable_postcode %>
+      <%= f.label :postcode, @form.postcode_field_label %>
+      <%= f.text_field :postcode, required: @form.enable_postcode, placeholder: @form.postcode_field_placeholder %>
     </div>
   <% end %>
 

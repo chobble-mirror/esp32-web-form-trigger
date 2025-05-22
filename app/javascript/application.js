@@ -1,6 +1,9 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
 
+// Load form field customization JavaScript
+import "./form_fields"
+
 // Handle image removal with confirmation dialog
 document.addEventListener('turbo:load', () => {
   document.querySelectorAll('.remove-image').forEach(link => {

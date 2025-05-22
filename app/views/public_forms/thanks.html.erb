@@ -4,6 +4,7 @@
     color: <%= @form.text_color %>;
   }
 </style>
+<meta http-equiv="refresh" content="20; url=<%= public_form_path(@form, @device) %>">
 
 <header>
   <% if @form.header_image.attached? %>

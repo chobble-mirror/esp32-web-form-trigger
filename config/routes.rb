@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get "form/:form_id/:device_id", to: "public_forms#show", as: "public_form"
   post "form/:form_id/:device_id", to: "public_forms#create"
   get "form/:form_id/:device_id/thanks", to: "public_forms#thanks", as: "form_thanks"
+  get "form/:form_id/:device_id/qr_code", to: "public_forms#qr_code", as: "form_qr_code"
 
   # Public device route
   get "devices/:id", to: "devices#show", as: "public_device"
@@ -71,6 +72,9 @@ Rails.application.routes.draw do
   # Images admin
   get "images/all", to: "images#all"
   get "images/orphaned", to: "images#orphaned"
+
+  # Links admin
+  get "links", to: "links#index"
 
   # Email queue monitoring
   resources :email_queues, only: [:index] do

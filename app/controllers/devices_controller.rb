@@ -15,6 +15,16 @@ class DevicesController < ApplicationController
     else
       Device.where(archived: false).order(created_at: :desc)
     end
+
+    # Preload the last submission for each device to avoid N+1 queries
+    @last_submissions = {}
+    device_ids = @devices.pluck(:id)
+
+    # Get the most recent submission for each device using a direct query to get the actual submission objects
+    device_ids.each do |device_id|
+      last_submission = Submission.where(device_id: device_id).order(created_at: :desc).first
+      @last_submissions[device_id] = last_submission.created_at if last_submission
+    end
   end
 
   def new
