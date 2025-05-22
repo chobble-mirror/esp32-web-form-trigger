@@ -121,7 +121,8 @@ RSpec.describe "Forms", type: :request do
       it "displays device links on the edit page" do
         device = Device.create!(name: "Test Device", location: "Test Location")
         get edit_form_path(form)
-        expect(response.body).to include(public_form_path(form.id, device.id))
+        form_identifier = form.code || form.id
+        expect(response.body).to include(public_form_path(form_identifier, device.id))
         expect(response.body).to include("Test Device")
       end
 

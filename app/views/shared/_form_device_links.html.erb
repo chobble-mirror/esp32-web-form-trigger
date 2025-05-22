@@ -19,14 +19,15 @@
     <% if defined?(current_device) && current_device.present? && defined?(forms) && forms.any? %>
       <% # Display all forms for a specific device %>
       <% forms.each do |form| %>
-        <% url = public_form_url(form.id, current_device.id) %>
+        <% form_identifier = form.code || form.id %>
+        <% url = public_form_url(form_identifier, current_device.id) %>
         <tr>
           <td><%= current_device.name %></td>
           <td><%= link_to form.name, edit_form_path(form) %></td>
           <td><%= link_to "Open", url, target: "_blank" %></td>
           <td>
-            <%= link_to form_qr_code_path(form.id, current_device.id, size: 2000), target: "_blank" do %>
-              <%= image_tag form_qr_code_path(form.id, current_device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
+            <%= link_to form_qr_code_path(form_identifier, current_device.id, size: 2000), target: "_blank" do %>
+              <%= image_tag form_qr_code_path(form_identifier, current_device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
             <% end %>
           </td>
         </tr>
@@ -34,14 +35,15 @@
     <% elsif defined?(current_form) && current_form.present? && defined?(devices) && devices.any? %>
       <% # Display all devices for a specific form %>
       <% devices.each do |device| %>
-        <% url = public_form_url(current_form.id, device.id) %>
+        <% form_identifier = current_form.code || current_form.id %>
+        <% url = public_form_url(form_identifier, device.id) %>
         <tr>
           <td><%= link_to device.name, edit_device_path(device) %></td>
           <td><%= current_form.name %></td>
           <td><%= link_to "Open", url, target: "_blank" %></td>
           <td>
-            <%= link_to form_qr_code_path(current_form.id, device.id, size: 2000), target: "_blank" do %>
-              <%= image_tag form_qr_code_path(current_form.id, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
+            <%= link_to form_qr_code_path(form_identifier, device.id, size: 2000), target: "_blank" do %>
+              <%= image_tag form_qr_code_path(form_identifier, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
             <% end %>
           </td>
         </tr>

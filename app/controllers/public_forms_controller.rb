@@ -48,7 +48,9 @@ class PublicFormsController < ApplicationController
 
   def qr_code
     # Generate QR code for the form-device combination
-    url = public_form_url(@form.id, @device.id)
+    # Use code instead of id if available
+    form_identifier = @form.code || @form.id
+    url = public_form_url(form_identifier, @device.id)
     size = params[:size].present? ? params[:size].to_i : 200
 
     # Create QR code with appropriate size
@@ -74,16 +76,18 @@ class PublicFormsController < ApplicationController
   private
 
   def set_form_and_device
-    @form = Form.find(params[:form_id])
+    @form = Form.find_by_code_or_id(params[:form_id])
     @device = Device.find(params[:device_id])
+    raise ActiveRecord::RecordNotFound unless @form && @device
   rescue ActiveRecord::RecordNotFound
     redirect_to root_path, alert: "Form or device not found"
   end
 
   def set_form_and_device_for_qr
     # Similar to set_form_and_device but renders PNG instead of redirecting
-    @form = Form.find(params[:form_id])
+    @form = Form.find_by_code_or_id(params[:form_id])
     @device = Device.find(params[:device_id])
+    raise ActiveRecord::RecordNotFound unless @form && @device
   rescue ActiveRecord::RecordNotFound
     # Return a default 'not found' QR code or error image
     blank_qr = ChunkyPNG::Image.new(200, 200, ChunkyPNG::Color::WHITE)

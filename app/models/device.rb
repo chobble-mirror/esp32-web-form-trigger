@@ -28,6 +28,6 @@ class Device < ApplicationRecord
   private
 
   def generate_id
-    self.id ||= SecureRandom.alphanumeric(12)
+    self.id ||= SecureRandom.alphanumeric(12).upcase
   end
 end

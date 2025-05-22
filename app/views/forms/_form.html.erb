@@ -78,34 +78,53 @@
       <% end %>
     </div>
 
-    <div>
-      <%= f.label :intro_image_hover_outline_color, "Intro Image Hover Outline Color" %>
-      <%= f.color_field :intro_image_hover_outline_color %>
-    </div>
+    <div class="colors-preview-container">
+      <div class="colors-container">
+        <div>
+          <%= f.label :background_color %>
+          <%= f.color_field :background_color %>
+        </div>
 
-    <div>
-      <%= f.label :background_color %>
-      <%= f.color_field :background_color %>
-    </div>
+        <div>
+          <%= f.label :text_color %>
+          <%= f.color_field :text_color %>
+        </div>
 
-    <div>
-      <%= f.label :text_color %>
-      <%= f.color_field :text_color %>
-    </div>
+        <div>
+          <%= f.label :button_color %>
+          <%= f.color_field :button_color %>
+        </div>
 
-    <div>
-      <%= f.label :button_color %>
-      <%= f.color_field :button_color %>
-    </div>
+        <div>
+          <%= f.label :button_text_color %>
+          <%= f.color_field :button_text_color %>
+        </div>
 
-    <div>
-      <%= f.label :button_text_color %>
-      <%= f.color_field :button_text_color %>
-    </div>
+        <div>
+          <%= f.label :button_text %>
+          <%= f.text_field :button_text, required: true %>
+        </div>
 
-    <div>
-      <%= f.label :button_text %>
-      <%= f.text_field :button_text, required: true %>
+        <div>
+          <%= f.label :intro_image_hover_outline_color, "Intro Image Hover Outline Color" %>
+          <%= f.color_field :intro_image_hover_outline_color %>
+        </div>
+      </div>
+
+      <div class="form-preview-container">
+        <h3>Live Preview</h3>
+        <div id="form-preview" style="background-color: <%= form.background_color %>; color: <%= form.text_color %>;">
+          <% if form.header_image.attached? %>
+            <div class="preview-header-image">
+              <%= image_tag url_for(form.header_image), style: "max-width: 100%; max-height: 120px; margin-bottom: 15px;" %>
+            </div>
+          <% end %>
+          <p class="preview-text">This is how your form will look to users</p>
+          <button class="preview-button" style="background-color: <%= form.button_color %>; color: <%= form.button_text_color %>;">
+            <%= form.button_text.present? ? form.button_text : 'Submit' %>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div>

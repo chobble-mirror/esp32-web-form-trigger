@@ -60,7 +60,8 @@ class FormsController < ApplicationController
   private
 
   def set_form
-    @form = Form.find(params[:id])
+    @form = Form.find_by_code_or_id(params[:id])
+    raise ActiveRecord::RecordNotFound unless @form
   end
 
   def form_params

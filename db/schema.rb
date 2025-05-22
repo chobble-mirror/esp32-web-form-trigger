@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_172538) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_22_183549) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -102,6 +102,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_172538) do
     t.string "postcode_field_placeholder", default: ""
     t.boolean "require_login", default: false
     t.integer "token_validity_seconds", default: 60, null: false
+    t.string "code", limit: 12
+    t.index ["code"], name: "index_forms_on_code", unique: true
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
