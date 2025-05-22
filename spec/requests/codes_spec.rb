@@ -12,7 +12,7 @@ RSpec.describe "Codes", type: :request do
 
       it "creates a new code with valid parameters" do
         expect {
-          post codes_path, params: { code: { device_id: device.id, form_id: form.id }, count: 1 }
+          post codes_path, params: {code: {device_id: device.id, form_id: form.id}, count: 1}
         }.to change(Code, :count).by(1)
 
         expect(response).to redirect_to(codes_path)
@@ -21,7 +21,7 @@ RSpec.describe "Codes", type: :request do
 
       it "creates multiple codes when count is specified" do
         expect {
-          post codes_path, params: { code: { device_id: device.id, form_id: form.id }, count: 3 }
+          post codes_path, params: {code: {device_id: device.id, form_id: form.id}, count: 3}
         }.to change(Code, :count).by(3)
 
         expect(response).to redirect_to(codes_path)
@@ -30,7 +30,7 @@ RSpec.describe "Codes", type: :request do
 
       it "handles non-existent device gracefully" do
         expect {
-          post codes_path, params: { code: { device_id: "nonexistent", form_id: form.id }, count: 1 }
+          post codes_path, params: {code: {device_id: "nonexistent", form_id: form.id}, count: 1}
         }.not_to change(Code, :count)
 
         expect(response).to redirect_to(new_code_path)
@@ -39,7 +39,7 @@ RSpec.describe "Codes", type: :request do
 
       it "handles non-existent form gracefully" do
         expect {
-          post codes_path, params: { code: { device_id: device.id, form_id: "nonexistent" }, count: 1 }
+          post codes_path, params: {code: {device_id: device.id, form_id: "nonexistent"}, count: 1}
         }.not_to change(Code, :count)
 
         expect(response).to redirect_to(new_code_path)

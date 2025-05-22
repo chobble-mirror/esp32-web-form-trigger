@@ -3,13 +3,13 @@
   <% if @device.archived %>
     <p><small>This device is archived</small></p>
   <% end %>
-
-  <div class="public-link">
-    <%= link_to public_device_path(@device), target: "_blank" do %>
-      <strong>Public View</strong>
-    <% end %>
-  </div>
 </header>
+
+<p class="center">
+  <%= link_to public_device_path(@device), target: "_blank" do %>
+    <strong>Public Status Page</strong>
+  <% end %>
+</p>
 
 <%= render 'form', device: @device %>
 
