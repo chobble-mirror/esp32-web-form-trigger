@@ -17,10 +17,10 @@ Rails.application.routes.draw do
   end
 
   # Public form routes
-  get "form/:form_id/:device_id", to: "public_forms#show", as: "public_form"
-  post "form/:form_id/:device_id", to: "public_forms#create"
-  get "form/:form_id/:device_id/thanks", to: "public_forms#thanks", as: "form_thanks"
-  get "form/:form_id/:device_id/qr_code", to: "public_forms#qr_code", as: "form_qr_code"
+  get "form/:code/:device_id", to: "public_forms#show", as: "public_form"
+  post "form/:code/:device_id", to: "public_forms#create"
+  get "form/:code/:device_id/thanks", to: "public_forms#thanks", as: "form_thanks"
+  get "form/:code/:device_id/qr_code", to: "public_forms#qr_code", as: "form_qr_code"
 
   # Public device route
   get "devices/:id", to: "devices#show", as: "public_device"

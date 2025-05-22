@@ -419,6 +419,10 @@ form > header:nth-child(2) {
   margin-top: -1.5rem;
 }
 
+form fieldset {
+  margin: 2rem 0;
+}
+
 input,
 label,
 select,

@@ -12,7 +12,7 @@
   }
 </style>
 <% unless defined?(@code) && @code.claimed? %>
-<meta http-equiv="refresh" content="20; url=<%= defined?(@code) ? public_code_path(@code) : public_form_path(@form, @device) %>">
+<meta http-equiv="refresh" content="20; url=<%= defined?(@code) ? public_code_path(@code) : public_form_path(@form.code, @device) %>">
 <% end %>
 
 <header>
@@ -36,7 +36,7 @@
 
     <% if @form.start_over_button_text.present? && !(defined?(@code) && @code.claimed?) %>
       <p class="start-over-button">
-        <% start_over_url = defined?(@code) ? public_code_path(@code) : public_form_path(@form, @device) %>
+        <% start_over_url = defined?(@code) ? public_code_path(@code) : public_form_path(@form.code, @device) %>
         <%= link_to @form.start_over_button_text, start_over_url, class: "button strong", style: "background-color: #{@form.button_color}; border-color: #{@form.button_color}; color: #{@form.button_text_color};" %>
       </p>
     <% end %>

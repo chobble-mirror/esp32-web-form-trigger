@@ -35,7 +35,7 @@ class PublicFormsController < ApplicationController
 
       # Redirect to thanks page instead of rendering
       # This prevents form resubmission on refresh
-      redirect_to form_thanks_path(@form, @device)
+      redirect_to form_thanks_path(@form.code, @device)
     else
       render :show, status: :unprocessable_entity
     end
@@ -48,9 +48,7 @@ class PublicFormsController < ApplicationController
 
   def qr_code
     # Generate QR code for the form-device combination
-    # Use code instead of id if available
-    form_identifier = @form.code || @form.id
-    url = public_form_url(form_identifier, @device.id)
+    url = public_form_url(@form.code, @device.id)
     size = params[:size].present? ? params[:size].to_i : 200
 
     # Create QR code with appropriate size
@@ -76,7 +74,7 @@ class PublicFormsController < ApplicationController
   private
 
   def set_form_and_device
-    @form = Form.find_by_code_or_id(params[:form_id])
+    @form = Form.find_by(code: params[:code])
     @device = Device.find(params[:device_id])
     raise ActiveRecord::RecordNotFound unless @form && @device
   rescue ActiveRecord::RecordNotFound
@@ -85,7 +83,7 @@ class PublicFormsController < ApplicationController
 
   def set_form_and_device_for_qr
     # Similar to set_form_and_device but renders PNG instead of redirecting
-    @form = Form.find_by_code_or_id(params[:form_id])
+    @form = Form.find_by(code: params[:code])
     @device = Device.find(params[:device_id])
     raise ActiveRecord::RecordNotFound unless @form && @device
   rescue ActiveRecord::RecordNotFound

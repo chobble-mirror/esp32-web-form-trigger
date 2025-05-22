@@ -2,74 +2,59 @@
 
 /* Status styles */
 .status-scheduled {
-  background-color: #f0ad4e;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: bold;
+	background-color: #f0ad4e;
+	color: white;
+	padding: 3px 8px;
+	border-radius: 4px;
+	font-weight: bold;
 }
 
 .status-processing {
-  background-color: #5bc0de;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: bold;
+	background-color: #5bc0de;
+	color: white;
+	padding: 3px 8px;
+	border-radius: 4px;
+	font-weight: bold;
 }
 
 .status-failed {
-  background-color: #d9534f;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: bold;
+	background-color: #d9534f;
+	color: white;
+	padding: 3px 8px;
+	border-radius: 4px;
+	font-weight: bold;
 }
 
 .status-completed {
-  background-color: #5cb85c;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: bold;
+	background-color: #5cb85c;
+	color: white;
+	padding: 3px 8px;
+	border-radius: 4px;
+	font-weight: bold;
 }
 
 /* Details styling */
 details {
-  margin: 5px 0;
+	margin: 5px 0;
 }
 
 details summary {
-  cursor: pointer;
-  color: #0275d8;
-  font-weight: bold;
+	cursor: pointer;
+	color: #0275d8;
+	font-weight: bold;
 }
 
 details pre {
-  margin-top: 10px;
-  background-color: #f8f9fa;
-  padding: 10px;
-  border-radius: 4px;
-  white-space: pre-wrap;
-  max-height: 250px;
-  overflow-y: auto;
-}
-
-/* Button styling */
-.button {
-  display: inline-block;
-  padding: 5px 10px;
-  margin: 3px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
-  text-decoration: none;
-}
-
-.button:hover {
-  background-color: #0056b3;
+	margin-top: 10px;
+	background-color: #f8f9fa;
+	padding: 10px;
+	border-radius: 4px;
+	white-space: pre-wrap;
+	max-height: 250px;
+	overflow-y: auto;
 }
 
 /* Text styles */
 .text-muted {
-  color: #6c757d;
+	color: #6c757d;
 }

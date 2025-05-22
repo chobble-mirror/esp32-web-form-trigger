@@ -1,5 +1,5 @@
 class Form < ApplicationRecord
-  before_validation :generate_code, on: :create
+  before_validation :generate_code
 
   has_one_attached :header_image
   has_one_attached :intro_image
