@@ -24,8 +24,8 @@
               <td><%= link_to form.name, edit_form_path(form) %></td>
               <td><%= link_to "Open", url, target: "_blank" %></td>
               <td>
-                <%= link_to form_qr_code_path(form.id, device.id, size: 2000), target: "_blank" do %>
-                  <%= image_tag form_qr_code_path(form.id, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
+                <%= link_to form_qr_code_path(form.code, device.id, size: 2000), target: "_blank" do %>
+                  <%= image_tag form_qr_code_path(form.code, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
                 <% end %>
               </td>
             </tr>
@@ -38,7 +38,7 @@
       <% if !@devices.any? %>
         No active devices available. <%= link_to "Create a device", new_device_path %> first.
       <% end %>
-      
+
       <% if !@forms.any? %>
         <% if !@devices.any? %><br><% end %>
         No forms available. <%= link_to "Create a form", new_form_path %> first.
