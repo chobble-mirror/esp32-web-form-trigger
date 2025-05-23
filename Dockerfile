@@ -38,6 +38,10 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# Ensure proper permissions for the build process
+RUN mkdir -p tmp/cache public/assets && \
+    chmod -R 777 tmp public
+
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:clobber || true
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
@@ -53,7 +57,17 @@ COPY --from=build /rails /rails
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+    chown -R rails:rails db log storage tmp && \
+    # Ensure the public/assets directory exists and has the right permissions
+    mkdir -p public/assets && \
+    chmod -R 775 public && \
+    chown -R rails:rails public
+    
+# Create necessary tmp directories with proper permissions
+RUN mkdir -p /rails/tmp/cache/assets/sprockets && \
+    chmod -R 775 /rails/tmp && \
+    chown -R rails:rails /rails/tmp
+
 USER 1000:1000
 
 # Entrypoint prepares the database and runs the job worker alongside the server.
