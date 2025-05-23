@@ -1,5 +1,6 @@
 class PublicFormsController < ApplicationController
   require "rqrcode"
+  include SubmissionProcessing
 
   # Skip login for public form views, but check if the form requires login
   skip_before_action :require_login
@@ -13,32 +14,7 @@ class PublicFormsController < ApplicationController
   end
 
   def create
-    @submission = @form.submissions.new(submission_params)
-    @submission.device = @device
-
-    # Associate the submission with the current user if logged in
-    @submission.user = current_user if current_user
-
-    if @submission.save
-      # Send the submission email only if target_email_address is present
-      if @form.target_email_address.present?
-        begin
-          SubmissionMailer.new_submission(@submission).deliver_later
-          # Email will be sent asynchronously, so we mark it as pending
-          # It will be updated when the job completes
-        rescue => e
-          # Log the error but continue with the form submission
-          Rails.logger.error "Failed to queue submission email: #{e.message}"
-          @submission.mark_as_failed!
-        end
-      end
-
-      # Redirect to thanks page instead of rendering
-      # This prevents form resubmission on refresh
-      redirect_to form_thanks_path(@form.code, @device)
-    else
-      render :show, status: :unprocessable_entity
-    end
+    process_submission
   end
 
   def thanks
@@ -90,23 +66,5 @@ class PublicFormsController < ApplicationController
     # Return a default 'not found' QR code or error image
     blank_qr = ChunkyPNG::Image.new(200, 200, ChunkyPNG::Color::WHITE)
     send_data blank_qr.to_s, type: "image/png", disposition: "inline"
-  end
-
-  def check_form_access
-    # Redirect to login if the form requires login and user is not logged in
-    if @form.require_login && !logged_in?
-      store_location # Store the current URL to redirect back after login
-      redirect_to login_path, alert: "You need to log in to access this form"
-    end
-  end
-
-  def submission_params
-    params.require(:submission).permit(
-      :name,
-      :email_address,
-      :phone,
-      :address,
-      :postcode
-    )
   end
 end
