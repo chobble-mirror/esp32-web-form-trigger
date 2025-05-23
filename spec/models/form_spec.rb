@@ -53,26 +53,26 @@ RSpec.describe Form, type: :model do
         button_text: "Submit",
         code: "ABCDEFGHIJKL"
       )
-      
+
       form.name = "Updated Form"
       form.save!
-      
+
       expect(form.reload.code).to eq("ABCDEFGHIJKL")
     end
 
     it "ensures uniqueness of codes" do
-      existing_form = Form.create!(
+      Form.create!(
         name: "Existing Form",
         button_text: "Submit",
         code: "ABCDEFGHIJKL"
       )
-      
+
       new_form = Form.new(
         name: "New Form",
         button_text: "Submit",
         code: "ABCDEFGHIJKL"
       )
-      
+
       expect(new_form).not_to be_valid
       expect(new_form.errors[:code]).to include("has already been taken")
     end
@@ -80,17 +80,17 @@ RSpec.describe Form, type: :model do
 
   describe ".find_by_code_or_id" do
     let!(:form) { Form.create!(name: "Test Form", button_text: "Submit") }
-    
+
     it "finds a form by its code" do
       found_form = Form.find_by_code_or_id(form.code)
       expect(found_form).to eq(form)
     end
-    
+
     it "finds a form by its ID" do
       found_form = Form.find_by_code_or_id(form.id)
       expect(found_form).to eq(form)
     end
-    
+
     it "returns nil when neither code nor ID matches" do
       found_form = Form.find_by_code_or_id("NONEXISTENT")
       expect(found_form).to be_nil

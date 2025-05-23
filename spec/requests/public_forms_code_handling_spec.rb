@@ -63,7 +63,7 @@ RSpec.describe "PublicForms code handling", type: :request do
 
     it "renders correctly in the forms edit view" do
       # Log in as admin to access the forms
-      admin = login_as_admin
+      login_as_admin
 
       # Link the form to the device
       form.devices << device
