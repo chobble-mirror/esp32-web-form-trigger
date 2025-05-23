@@ -64,7 +64,7 @@
     <% end %>
   </header>
 
-<%= form_with(model: @submission, url: defined?(@code) ? public_code_path(@code) : public_form_path(@form.code, @device.id), method: :post) do |f| %>
+<%= form_with(model: @submission, url: public_form_path(@form.code, @device.id), method: :post, scope: :submission) do |f| %>
   <% if @submission.errors.any? %>
     <div>
       <h2><%= pluralize(@submission.errors.count, "error") %> prohibited this submission from being saved:</h2>
