@@ -2,10 +2,10 @@
 import "@hotwired/turbo-rails"
 
 // Load form field customization JavaScript
-import "./form_fields"
+import "form_fields"
 
 // Load form preview functionality
-import "./form_preview"
+import "form_preview"
 
 // Handle image removal with confirmation dialog
 document.addEventListener('turbo:load', () => {

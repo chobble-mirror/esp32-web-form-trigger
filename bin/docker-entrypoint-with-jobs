@@ -11,6 +11,13 @@ if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   
   # Also prepare the queue schema
   ./bin/rails db:migrate
+  
+  # Ensure assets are properly compiled
+  if [ "${RAILS_ENV}" == "production" ]; then
+    echo "Checking and recompiling assets if needed..."
+    ./bin/rails assets:clobber 2>/dev/null || true
+    ./bin/rails assets:precompile
+  fi
 fi
 
 # Start the SolidQueue worker process in the background
