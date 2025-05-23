@@ -4,6 +4,12 @@
   # - devices: array of Device objects (optional)
   # - current_device: a Device object (optional, used when showing forms for a specific device)
   # - current_form: a Form object (optional, used when showing devices for a specific form)
+  
+  # Set up which devices and forms to display
+  device_list = defined?(current_device) && current_device.present? ? [current_device] : (defined?(devices) ? devices : [])
+  form_list = defined?(current_form) && current_form.present? ? [current_form] : (defined?(forms) ? forms : [])
+  
+  has_content = device_list.any? && form_list.any?
 %>
 
 <table>
@@ -16,35 +22,36 @@
     </tr>
   </thead>
   <tbody>
-    <% if defined?(current_device) && current_device.present? && defined?(forms) && forms.any? %>
-      <% # Display all forms for a specific device %>
-      <% forms.each do |form| %>
-        <% url = public_form_url(form.code, current_device.id) %>
-        <tr>
-          <td><%= current_device.name %></td>
-          <td><%= link_to form.name, edit_form_path(form) %></td>
-          <td><%= link_to "Open", url, target: "_blank" %></td>
-          <td>
-            <%= link_to form_qr_code_path(form.code, current_device.id, size: 2000), target: "_blank" do %>
-              <%= image_tag form_qr_code_path(form.code, current_device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    <% elsif defined?(current_form) && current_form.present? && defined?(devices) && devices.any? %>
-      <% # Display all devices for a specific form %>
-      <% devices.each do |device| %>
-        <% url = public_form_url(current_form.code, device.id) %>
-        <tr>
-          <td><%= link_to device.name, edit_device_path(device) %></td>
-          <td><%= current_form.name %></td>
-          <td><%= link_to "Open", url, target: "_blank" %></td>
-          <td>
-            <%= link_to form_qr_code_path(current_form.code, device.id, size: 2000), target: "_blank" do %>
-              <%= image_tag form_qr_code_path(current_form.code, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
-            <% end %>
-          </td>
-        </tr>
+    <% if has_content %>
+      <% device_list.each do |device| %>
+        <% form_list.each do |form| %>
+          <% 
+            form_code = form.respond_to?(:code) ? form.code : form.id
+            url = public_form_url(form_code, device.id) 
+          %>
+          <tr>
+            <td>
+              <% if defined?(current_device) && current_device == device %>
+                <%= device.name %>
+              <% else %>
+                <%= link_to device.name, edit_device_path(device) %>
+              <% end %>
+            </td>
+            <td>
+              <% if defined?(current_form) && current_form == form %>
+                <%= form.name %>
+              <% else %>
+                <%= link_to form.name, edit_form_path(form) %>
+              <% end %>
+            </td>
+            <td><%= link_to "Open", url, target: "_blank" %></td>
+            <td>
+              <%= link_to form_qr_code_path(form_code, device.id, size: 2000), target: "_blank" do %>
+                <%= image_tag form_qr_code_path(form_code, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
     <% else %>
       <tr>

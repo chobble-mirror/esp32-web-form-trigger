@@ -1,38 +1,12 @@
 <header>
-  <h1>Form Links</h1>
+  <h1>Device &amp; Form Links</h1>
 </header>
 
 <div class="center">
-  <p>This page lists all available device and form combinations with QR codes for easy access.</p>
+  <p>Links to all available device and form combinations, with QR codes</p>
 
   <% if @devices.any? && @forms.any? %>
-    <table>
-      <thead>
-        <tr>
-          <th>Device</th>
-          <th>Form</th>
-          <th>Link</th>
-          <th>QR</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @devices.each do |device| %>
-          <% @forms.each do |form| %>
-            <% url = public_form_url(form.id, device.id) %>
-            <tr>
-              <td><%= link_to device.name, edit_device_path(device) %></td>
-              <td><%= link_to form.name, edit_form_path(form) %></td>
-              <td><%= link_to "Open", url, target: "_blank" %></td>
-              <td>
-                <%= link_to form_qr_code_path(form.code, device.id, size: 2000), target: "_blank" do %>
-                  <%= image_tag form_qr_code_path(form.code, device.id, size: 200), alt: "QR Code", width: 200, height: 200 %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render partial: 'shared/form_device_links', locals: { devices: @devices, forms: @forms } %>
   <% else %>
     <p>
       <% if !@devices.any? %>
