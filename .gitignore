@@ -77,3 +77,5 @@ result-*
 # Ignore automatically generated direnv output
 .direnv
 .gems
+
+**/.claude/settings.local.json
